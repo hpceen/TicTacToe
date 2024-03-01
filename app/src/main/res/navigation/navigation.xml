@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainMenu">
+
+    <fragment
+        android:id="@+id/mainMenu"
+        android:name="com.hpceen.tictactoe.MainMenu"
+        android:label="fragment_main_menu"
+        tools:layout="@layout/fragment_main_menu" >
+        <action
+            android:id="@+id/action_mainMenu_to_offlineGame"
+            app:destination="@id/offlineGame" />
+        <action
+            android:id="@+id/action_mainMenu_to_onlineGame"
+            app:destination="@id/onlineGame" />
+    </fragment>
+    <fragment
+        android:id="@+id/offlineGame"
+        android:name="com.hpceen.tictactoe.OfflineGame"
+        android:label="fragment_offline_game"
+        tools:layout="@layout/fragment_offline_game" />
+    <fragment
+        android:id="@+id/onlineGame"
+        android:name="com.hpceen.tictactoe.OnlineGame"
+        android:label="fragment_online_game"
+        tools:layout="@layout/fragment_online_game" />
+</navigation>

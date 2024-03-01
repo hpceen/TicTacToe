@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TicTacToe++</string>
+    <string name="online_game">Online Game</string>
+    <string name="offline_game">Local Game</string>
+    <string name="turn_x">Ход X</string>
+    <string name="turn_o">Ход O</string>
+</resources>
