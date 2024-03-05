@@ -21,10 +21,19 @@
         android:id="@+id/offlineGame"
         android:name="com.hpceen.tictactoe.OfflineGame"
         android:label="fragment_offline_game"
-        tools:layout="@layout/fragment_offline_game" />
+        tools:layout="@layout/fragment_offline_game" >
+        <action
+            android:id="@+id/action_offlineGame_to_game"
+            app:destination="@id/game" />
+    </fragment>
     <fragment
         android:id="@+id/onlineGame"
         android:name="com.hpceen.tictactoe.OnlineGame"
         android:label="fragment_online_game"
         tools:layout="@layout/fragment_online_game" />
+    <fragment
+        android:id="@+id/game"
+        android:name="com.hpceen.tictactoe.Game"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" />
 </navigation>

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableRow
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -27,4 +29,18 @@ class OfflineGame : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val table = binding.tableGame
+        for (row in table.children) {
+            if (row is TableRow) {
+                for (button in row.children) {
+                    button.setOnClickListener {
+                        navController.navigate(R.id.game)
+                    }
+                }
+            }
+
+        }
+    }
 }
