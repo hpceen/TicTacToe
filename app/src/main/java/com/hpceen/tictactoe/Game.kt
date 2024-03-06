@@ -16,7 +16,7 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
 
     private var currentTurn: Int = 0
     private val imageButtons = mutableListOf<ImageButton>()
-    private val gameResult = mutableListOf<Int>()
+    private val gameResult = mutableListOf<GameResults>()
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentGameBinding
         get() = FragmentGameBinding::inflate
 
@@ -42,7 +42,7 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
             if (row is TableRow) {
                 for (button in row.children) {
                     imageButtons.add(button as ImageButton)
-                    gameResult.add(-1)
+                    gameResult.add(GameResults.Nothing)
                 }
             }
         }
@@ -58,7 +58,7 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
                     }
 
                     O -> {
-                        gameResult[i] = X
+                        gameResult[i] = O
                         (currentButton as ImageButton).setImageResource(R.drawable.circle)
                         currentTurn = X
                     }
