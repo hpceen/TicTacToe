@@ -1,42 +1,32 @@
 package com.hpceen.tictactoe
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TableRow
 import androidx.core.view.children
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.hpceen.tictactoe.Constants.X
 import com.hpceen.tictactoe.databinding.FragmentOfflineGameBinding
 
-class OfflineGame : Fragment() {
-    private lateinit var binding: FragmentOfflineGameBinding
-    private lateinit var navController: NavController
+class OfflineGame : ViewBindingFragment<FragmentOfflineGameBinding>() {
+    private val args: OfflineGameArgs by navArgs<OfflineGameArgs>()
+    private var winner = -1
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentOfflineGameBinding
+        get() = FragmentOfflineGameBinding::inflate
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = FragmentOfflineGameBinding.inflate(layoutInflater)
-        navController = findNavController()
-    }
+    private lateinit var lastButton: ImageButton
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val table = binding.tableGame
-        for (row in table.children) {
+    //TODO winner offline game
+    override fun setupView() = with(binding) {
+        winner = args.winner
+        for (row in tableGame.children) {
             if (row is TableRow) {
                 for (button in row.children) {
                     button.setOnClickListener {
-                        navController.navigate(R.id.game)
+                        lastButton = button as ImageButton
+                        button.isEnabled = false
+                        navController.navigate(OfflineGameDirections.actionOfflineGameToGame(X))
                     }
                 }
             }
