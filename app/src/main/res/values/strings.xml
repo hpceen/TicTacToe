@@ -2,6 +2,7 @@
     <string name="app_name">TicTacToe++</string>
     <string name="online_game">Online Game</string>
     <string name="offline_game">Local Game</string>
+    <string name="rules">Правила</string>
     <string name="turn_x">Ход X</string>
     <string name="turn_o">Ход O</string>
     <string name="winner_x">Победили X!</string>

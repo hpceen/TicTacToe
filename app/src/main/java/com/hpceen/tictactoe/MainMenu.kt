@@ -14,7 +14,7 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
             navController.navigate(MainMenuDirections.actionMainMenuToGame(Turn.X))
         }
         buttonOnlineGame.setOnClickListener {
-            navController.navigate(MainMenuDirections.actionMainMenuToOnlineGame())
+            navController.navigate(MainMenuDirections.actionMainMenuToGameNewArchitecture())
         }
     }
 }

@@ -11,17 +11,12 @@
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu">
         <action
-            android:id="@+id/action_mainMenu_to_onlineGame"
-            app:destination="@id/onlineGame" />
-        <action
             android:id="@+id/action_mainMenu_to_game"
             app:destination="@id/game" />
+        <action
+            android:id="@+id/action_mainMenu_to_gameNewArchitecture"
+            app:destination="@id/gameNewArchitecture" />
     </fragment>
-    <fragment
-        android:id="@+id/onlineGame"
-        android:name="com.hpceen.tictactoe.OnlineGame"
-        android:label="fragment_online_game"
-        tools:layout="@layout/fragment_online_game" />
 
     <fragment
         android:id="@+id/game"
@@ -31,5 +26,14 @@
         <argument
             android:name="firstTurn"
             app:argType="com.hpceen.tictactoe.Turn" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameNewArchitecture"
+        android:name="com.hpceen.tictactoe.GameNewArchitecture"
+        android:label="fragment_game_new_architecture"
+        tools:layout="@layout/fragment_game_new_architecture" >
+        <action
+            android:id="@+id/action_gameNewArchitecture_to_mainMenu"
+            app:destination="@id/mainMenu" />
     </fragment>
 </navigation>

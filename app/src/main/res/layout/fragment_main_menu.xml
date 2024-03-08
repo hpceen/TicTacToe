@@ -34,4 +34,12 @@
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/button_online_game" />
 
+    <Button
+        android:id="@+id/button_rules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/rules"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/button_offline_game" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
