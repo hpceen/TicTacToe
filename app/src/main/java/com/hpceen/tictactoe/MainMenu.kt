@@ -1,10 +1,14 @@
 package com.hpceen.tictactoe
 
+import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Toast
 import com.hpceen.tictactoe.databinding.FragmentMainMenuBinding
+import com.hpceen.tictactoe.databinding.PopupRulesBinding
 import com.hpceen.tictactoe.help_classes.ViewBindingFragment
+
 
 class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
 
@@ -18,5 +22,16 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
         buttonOfflineGame.setOnClickListener {
             navController.navigate(MainMenuDirections.actionMainMenuToGameNewArchitecture())
         }
+        buttonRules.setOnClickListener {
+            showRulesPopup()
+        }
+    }
+
+    private fun showRulesPopup() {
+        val dialog = Dialog(requireContext())
+        val dialogBinding: PopupRulesBinding = PopupRulesBinding.inflate(dialog.layoutInflater)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
     }
 }
