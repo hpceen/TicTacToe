@@ -2,7 +2,9 @@ package com.hpceen.tictactoe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import com.hpceen.tictactoe.databinding.FragmentMainMenuBinding
+import com.hpceen.tictactoe.help_classes.ViewBindingFragment
 
 class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
 
@@ -10,10 +12,10 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
         get() = FragmentMainMenuBinding::inflate
 
     override fun setupView() = with(binding) {
-        buttonOfflineGame.setOnClickListener {
-            navController.navigate(MainMenuDirections.actionMainMenuToGame(Turn.X))
-        }
         buttonOnlineGame.setOnClickListener {
+            Toast.makeText(context, "Еще не реализовано", Toast.LENGTH_SHORT).show()
+        }
+        buttonOfflineGame.setOnClickListener {
             navController.navigate(MainMenuDirections.actionMainMenuToGameNewArchitecture())
         }
     }

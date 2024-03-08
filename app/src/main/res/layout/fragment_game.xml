@@ -33,6 +33,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -40,6 +41,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -47,30 +49,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -81,6 +60,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -88,6 +68,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -95,33 +76,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-            </TableLayout>
-
-            <TableLayout android:background="@drawable/cluster_divider_background">
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -132,6 +87,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -139,6 +95,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -146,30 +103,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -183,6 +117,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -190,6 +125,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -197,30 +133,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -231,6 +144,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -238,6 +152,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -245,37 +160,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-            </TableLayout>
-
-        </TableRow>
-
-        <TableRow>
-
-            <TableLayout android:background="@drawable/cluster_divider_background">
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -286,6 +171,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -293,6 +179,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -300,30 +187,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -337,6 +201,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -344,6 +209,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -351,30 +217,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -385,6 +228,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -392,6 +236,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -399,33 +244,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-            </TableLayout>
-
-            <TableLayout android:background="@drawable/cluster_divider_background">
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -436,6 +255,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -443,6 +263,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -450,30 +271,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -491,6 +289,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -498,6 +297,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -505,30 +305,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -539,6 +316,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -546,6 +324,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -553,33 +332,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-            </TableLayout>
-
-            <TableLayout android:background="@drawable/cluster_divider_background">
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -590,6 +343,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -597,6 +351,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -604,30 +359,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -641,6 +373,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -648,6 +381,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -655,30 +389,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-                </TableRow>
-
-                <TableRow>
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
-                        android:padding="4dp"
-                        android:scaleType="fitCenter" />
-
-                    <ImageButton
-                        android:layout_width="39dp"
-                        android:layout_height="39dp"
-                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -689,6 +400,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -696,6 +408,7 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
 
@@ -703,6 +416,374 @@
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout android:background="@drawable/cluster_divider_background">
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+            </TableLayout>
+
+        </TableRow>
+
+        <TableRow>
+
+            <TableLayout android:background="@drawable/cluster_divider_background">
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout android:background="@drawable/cluster_divider_background">
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout android:background="@drawable/cluster_divider_background">
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+                </TableRow>
+
+                <TableRow>
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:background="@drawable/button_state_selector"
+                        android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:scaleType="fitCenter" />
                 </TableRow>
@@ -710,4 +791,15 @@
 
         </TableRow>
     </TableLayout>
+
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="30dp"
+        android:text="Назад"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/table_game" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,12 @@
-package com.hpceen.tictactoe
+package com.hpceen.tictactoe.help_classes
+
+import com.hpceen.tictactoe.states.CellState
+import com.hpceen.tictactoe.states.ClusterState
+import com.hpceen.tictactoe.states.Turn
 
 class Cluster(private val listCells: MutableList<Cell>) : Iterable<Cell> {
 
     var state: ClusterState = ClusterState.Nothing
-        get() = field
-        set(value) {
-            field = value
-        }
     val indices: IntRange
         get() = listCells.indices
 
@@ -24,19 +24,18 @@ class Cluster(private val listCells: MutableList<Cell>) : Iterable<Cell> {
             listStates.add(cell.state)
         }
         //Rows
-        if (isWin(listStates, 0, 1, 2)) state = cellStateToClusterState(listStates, 0)
-        else if (isWin(listStates, 3, 4, 5)) state = cellStateToClusterState(listStates, 3)
-        else if (isWin(listStates, 6, 7, 8)) state = cellStateToClusterState(listStates, 6)
+        state = if (isWin(listStates, 0, 1, 2)) cellStateToClusterState(listStates, 0)
+        else if (isWin(listStates, 3, 4, 5)) cellStateToClusterState(listStates, 3)
+        else if (isWin(listStates, 6, 7, 8)) cellStateToClusterState(listStates, 6)
         //Columns
-        else if (isWin(listStates, 0, 3, 6)) state = cellStateToClusterState(listStates, 0)
-        else if (isWin(listStates, 1, 4, 7)) state = cellStateToClusterState(listStates, 1)
-        else if (isWin(listStates, 2, 5, 8)) state = cellStateToClusterState(listStates, 2)
+        else if (isWin(listStates, 0, 3, 6)) cellStateToClusterState(listStates, 0)
+        else if (isWin(listStates, 1, 4, 7)) cellStateToClusterState(listStates, 1)
+        else if (isWin(listStates, 2, 5, 8)) cellStateToClusterState(listStates, 2)
         //Diagonals
-        else if (isWin(listStates, 0, 4, 8)) state = cellStateToClusterState(listStates, 0)
-        else if (isWin(listStates, 2, 4, 6)) state = cellStateToClusterState(listStates, 2)
-        else if (listStates.all { cellState -> cellState != CellState.Nothing }) state =
-            ClusterState.Draw
-        else state = ClusterState.Nothing
+        else if (isWin(listStates, 0, 4, 8)) cellStateToClusterState(listStates, 0)
+        else if (isWin(listStates, 2, 4, 6)) cellStateToClusterState(listStates, 2)
+        else if (listStates.all { cellState -> cellState != CellState.Nothing }) ClusterState.Draw
+        else ClusterState.Nothing
 
     }
 

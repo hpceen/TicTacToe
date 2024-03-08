@@ -6,274 +6,188 @@ import android.widget.ImageButton
 import android.widget.TableLayout
 import android.widget.TableRow
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import com.hpceen.tictactoe.databinding.FragmentGameBinding
+import com.hpceen.tictactoe.help_classes.Cell
+import com.hpceen.tictactoe.help_classes.Cluster
+import com.hpceen.tictactoe.help_classes.ViewBindingFragment
+import com.hpceen.tictactoe.states.CellState
+import com.hpceen.tictactoe.states.ClusterState
+import com.hpceen.tictactoe.states.GameState
+import com.hpceen.tictactoe.states.Turn
 
 class Game : ViewBindingFragment<FragmentGameBinding>() {
-    private lateinit var viewModel: GameViewModel
+    private var viewModel = GameViewModel()
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentGameBinding
         get() = FragmentGameBinding::inflate
 
-//    private fun setupGameField() = with(binding) {
-//        for (tableRow in tableGame.children) {
-//            if (tableRow is TableRow) {
-//                for (table in tableRow.children) {
-//                    val listCells = mutableListOf<Cell>()
-//                    if (table is TableLayout) {
-//                        for (row in table.children) {
-//                            if (row is TableRow) {
-//                                for (button in row.children) {
-//                                    if (button is ImageButton) listCells.add(Cell(button))
-//                                }
-//                            }
-//                        }
-//                    }
-//                    viewModel.gameField.value!!.add(Cluster(listCells))
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun makeMove(cell: Cell) {
-//
-//    }
-//
-//    override fun setupView() = with(binding) {
-//        viewModel.gameField.value = mutableListOf()
-//        setupGameField()
-//        for (cluster in viewModel.gameField.value!!) {
-//            for (cell in cluster) {
-//                cell.setOnClickListener { cell -> makeMove() }
-//            }
-//        }
-//    }
+    override fun setupView() = with(binding) {
+        setupGameField()
+        buttonBack.isEnabled = false
+        buttonBack.isVisible = false
+        buttonBack.setOnClickListener {
+            navController.navigate(GameDirections.actionGameNewArchitectureToMainMenu())
+        }
+        textViewTurn.setText(R.string.turn_x)
+        val gameField = viewModel.gameField.value!!
+        for (clusterIndex in gameField.indices) {
+            for (cellIndex in gameField[clusterIndex].indices) {
+                gameField[clusterIndex][cellIndex].button.setOnClickListener {
+                    makeMove(clusterIndex, cellIndex)
+                }
+            }
+        }
+    }
 
-    private fun setupGameField(tableGame: TableLayout) {
-        for (tableRow in tableGame.children) {
-            if (tableRow is TableRow) {
-                for (table in tableRow.children) {
-                    if (table is TableLayout) {
-                        val listButtons = mutableListOf<ImageButton>()
-                        for (row in table.children) {
-                            if (row is TableRow) {
-                                for (button in row.children) {
-                                    if (button is ImageButton) listButtons.add(button)
+    private fun makeMove(clusterIndex: Int, cellIndex: Int) {
+        changeState(clusterIndex, cellIndex)
+        nextTurn()
+    }
+
+    private fun nextTurn() = with(binding) {
+        when (viewModel.gameState.value!!) {
+            GameState.XWinner -> {
+                textViewTurn.setText(R.string.winner_x)
+                return
+            }
+
+            GameState.OWinner -> {
+                textViewTurn.setText(R.string.winner_o)
+                return
+            }
+
+            GameState.Draw -> {
+                textViewTurn.setText(R.string.draw)
+                return
+            }
+
+            GameState.Nothing -> {}
+        }
+        viewModel.currentTurn.value = when (viewModel.currentTurn.value!!) {
+            Turn.X -> Turn.O
+            Turn.O -> Turn.X
+        }
+        if (viewModel.currentTurn.value!! == Turn.X) textViewTurn.setText(R.string.turn_x)
+        if (viewModel.currentTurn.value!! == Turn.O) textViewTurn.setText(R.string.turn_o)
+    }
+
+    private fun changeState(clusterIndex: Int, cellIndex: Int) = with(binding) {
+        val gameField = viewModel.gameField.value!!
+        changeCellState(gameField[clusterIndex][cellIndex])
+        changeFinishedClusters(clusterIndex, cellIndex)
+        changeAllowedClusters(clusterIndex, cellIndex)
+        viewModel.gameState.value = tryFinish()
+        changeGameFieldState()
+    }
+
+    private fun changeCellState(cell: Cell) {
+        cell.button.isClickable = false
+        cell.changeImage(viewModel.currentTurn.value!!)
+        cell.state = turnToCellState(viewModel.currentTurn.value!!)
+    }
+
+    private fun turnToCellState(turn: Turn): CellState {
+        return when (turn) {
+            Turn.X -> CellState.X
+            Turn.O -> CellState.O
+        }
+    }
+
+    private fun changeAllowedClusters(clusterIndex: Int, cellIndex: Int) {
+        if (cellIndex in viewModel.finishedClusters.value!!) viewModel.allowedClusters.value =
+            ((0..8) subtract viewModel.finishedClusters.value!!).toMutableSet()
+        else {
+            viewModel.allowedClusters.value!!.clear()
+            viewModel.allowedClusters.value!!.add(cellIndex)
+        }
+
+    }
+
+    private fun changeFinishedClusters(clusterIndex: Int, cellIndex: Int) {
+        val cluster = viewModel.gameField.value!![clusterIndex]
+        cluster.tryFinish()
+        if (cluster.state != ClusterState.Nothing) {
+            viewModel.finishedClusters.value!!.add(clusterIndex)
+            cluster.changeAllImages()
+        }
+    }
+
+    private fun tryFinish(): GameState {
+        fun isWin(
+            listStates: MutableList<ClusterState>, i: Int, j: Int, k: Int
+        ): Boolean {
+            if (listStates[i] == ClusterState.Nothing) return false
+            return listStates[i] == listStates[j] && listStates[i] == listStates[k]
+        }
+
+        fun clusterStateToGameState(
+            listStates: MutableList<ClusterState>, index: Int
+        ): GameState {
+            return when (listStates[index]) {
+                ClusterState.X -> GameState.XWinner
+                ClusterState.O -> GameState.OWinner
+                ClusterState.Draw -> GameState.Draw
+                ClusterState.Nothing -> GameState.Nothing
+            }
+        }
+
+        val listStates = mutableListOf<ClusterState>()
+        for (cluster in viewModel.gameField.value!!) listStates.add(cluster.state)
+        //Rows
+        if (isWin(listStates, 0, 1, 2)) return clusterStateToGameState(listStates, 0)
+        if (isWin(listStates, 3, 4, 5)) return clusterStateToGameState(listStates, 3)
+        if (isWin(listStates, 6, 7, 8)) return clusterStateToGameState(listStates, 6)
+        //Columns
+        if (isWin(listStates, 0, 3, 6)) return clusterStateToGameState(listStates, 0)
+        if (isWin(listStates, 1, 4, 7)) return clusterStateToGameState(listStates, 1)
+        if (isWin(listStates, 2, 5, 8)) return clusterStateToGameState(listStates, 2)
+        //Diagonals
+        if (isWin(listStates, 0, 4, 8)) return clusterStateToGameState(listStates, 0)
+        if (isWin(listStates, 2, 4, 6)) return clusterStateToGameState(listStates, 2)
+        if (listStates.all { clusterState -> clusterState != ClusterState.Nothing }) {
+            val xWinnerCount = listStates.count { clusterState -> clusterState == ClusterState.X }
+            val oWinnerCount = listStates.count { clusterState -> clusterState == ClusterState.O }
+            if (xWinnerCount > oWinnerCount) return GameState.XWinner
+            if (oWinnerCount > xWinnerCount) return GameState.OWinner
+            return GameState.Draw
+        }
+        return GameState.Nothing
+    }
+
+    private fun changeGameFieldState() = with(binding) {
+        val gameField = viewModel.gameField.value!!
+        if (viewModel.gameState.value!! == GameState.Nothing) {
+            gameField.forEach { cluster -> cluster.disableCluster() }
+            for (clusterIndex in viewModel.allowedClusters.value!!) {
+                gameField[clusterIndex].enableCluster()
+            }
+        } else {
+            gameField.forEach { cluster -> cluster.disableCluster() }
+            buttonBack.isEnabled = true
+            buttonBack.isVisible = true
+        }
+    }
+
+    private fun setupGameField() = with(binding) {
+        for (bigRow in tableGame.children) {
+            if (bigRow is TableRow) {
+                for (smallTable in bigRow.children) {
+                    if (smallTable is TableLayout) {
+                        val listCells = mutableListOf<Cell>()
+                        for (smallRow in smallTable.children) {
+                            if (smallRow is TableRow) {
+                                for (button in smallRow.children) {
+                                    if (button is ImageButton) {
+                                        listCells.add(Cell(button))
+                                    }
                                 }
                             }
                         }
-                        viewModel.gameField.value!!.add(listButtons)
+                        viewModel.gameField.value!!.add(Cluster(listCells))
                     }
                 }
             }
         }
     }
 
-    private fun changeImage(indexOfTable: Int, indexOfButton: Int) {
-        viewModel.gameField.value!![indexOfTable][indexOfButton].setImageResource(if (viewModel.currentTurn.value == Turn.X) R.drawable.cross else R.drawable.circle)
-    }
-
-    private fun makeMove(indexOfTable: Int, indexOfButton: Int) {
-        viewModel.limitations.value = indexOfButton
-        viewModel.gameField.value!![indexOfTable][indexOfButton].isClickable = false
-        viewModel.gameFieldCellStates.value!![indexOfTable][indexOfButton] =
-            if (viewModel.currentTurn.value == Turn.X) CellState.X else CellState.O
-        changeImage(indexOfTable, indexOfButton)
-        changeClusterState(indexOfTable)
-        changeButtonsState()
-        viewModel.currentTurn.value = if (viewModel.currentTurn.value == Turn.X) Turn.O else Turn.X
-        setTurnText()
-    }
-
-    private fun enableAllButtons() {
-        for (table in viewModel.gameField.value!!) {
-            for (button in table) {
-                button.isEnabled = true
-            }
-        }
-    }
-
-    private fun disableAllButtons() {
-        for (table in viewModel.gameField.value!!) {
-            for (button in table) {
-                button.isEnabled = false
-            }
-        }
-    }
-
-    private fun enableCluster(indexOfTable: Int) {
-        for (button in viewModel.gameField.value!![indexOfTable]) {
-            button.isEnabled = true
-        }
-    }
-
-    private fun disableCluster(indexOfTable: Int) {
-        for (button in viewModel.gameField.value!![indexOfTable]) {
-            button.isEnabled = false
-        }
-    }
-
-
-    private fun changeButtonsState() {
-        if (viewModel.limitations.value!! in viewModel.wonClusters.value!!) {
-            enableAllButtons()
-            disableCluster(viewModel.limitations.value!!)
-        } else {
-            disableAllButtons()
-            enableCluster(viewModel.limitations.value!!)
-        }
-    }
-
-    private fun getClusterWinnerEnumFromCellStateEnum(cellState: CellState): ClusterState {
-        return when (cellState) {
-            CellState.Nothing -> ClusterState.Draw
-            CellState.O -> ClusterState.O
-            CellState.X -> ClusterState.X
-        }
-    }
-
-    private fun clusterWinner(indexOfTable: Int): ClusterState {
-        val cluster = viewModel.gameFieldCellStates.value!![indexOfTable]
-        if (cluster[0] != CellState.Nothing && cluster[0] == cluster[1] && cluster[0] == cluster[2]) return getClusterWinnerEnumFromCellStateEnum(
-            cluster[0]
-        )
-        if (cluster[3] != CellState.Nothing && cluster[3] == cluster[4] && cluster[3] == cluster[5]) return getClusterWinnerEnumFromCellStateEnum(
-            cluster[3]
-        )
-        if (cluster[6] != CellState.Nothing && cluster[6] == cluster[7] && cluster[6] == cluster[8]) return getClusterWinnerEnumFromCellStateEnum(
-            cluster[6]
-        )
-        if (cluster[0] != CellState.Nothing && cluster[0] == cluster[3] && cluster[0] == cluster[6]) return getClusterWinnerEnumFromCellStateEnum(
-            cluster[0]
-        )
-        if (cluster[1] != CellState.Nothing && cluster[1] == cluster[4] && cluster[1] == cluster[7]) return getClusterWinnerEnumFromCellStateEnum(
-            cluster[1]
-        )
-        if (cluster[2] != CellState.Nothing && cluster[2] == cluster[5] && cluster[2] == cluster[8]) return getClusterWinnerEnumFromCellStateEnum(
-            cluster[2]
-        )
-        if (cluster[0] != CellState.Nothing && cluster[0] == cluster[4] && cluster[0] == cluster[8]) return getClusterWinnerEnumFromCellStateEnum(
-            cluster[0]
-        )
-        if (cluster[2] != CellState.Nothing && cluster[2] == cluster[4] && cluster[2] == cluster[6]) return getClusterWinnerEnumFromCellStateEnum(
-            cluster[2]
-        )
-        if (cluster.all { cell -> cell != CellState.Nothing }) return ClusterState.Draw
-        return ClusterState.Nothing
-    }
-
-    private fun changeClusterState(indexOfTable: Int) {
-        val clusterState = clusterWinner(indexOfTable)
-        viewModel.clusterStates.value!![indexOfTable] = clusterState
-        when (clusterState) {
-            ClusterState.Nothing -> return
-
-            ClusterState.X -> {
-                viewModel.wonClusters.value!!.add(indexOfTable)
-                for (button in viewModel.gameField.value!![indexOfTable]) {
-                    button.setImageResource(R.drawable.cross)
-                }
-                viewModel.gameFieldCellStates.value!![indexOfTable].replaceAll { CellState.X }
-            }
-
-            ClusterState.O -> {
-                viewModel.wonClusters.value!!.add(indexOfTable)
-                for (button in viewModel.gameField.value!![indexOfTable]) {
-                    button.setImageResource(R.drawable.circle)
-                }
-                viewModel.gameFieldCellStates.value!![indexOfTable].replaceAll { CellState.O }
-            }
-
-            ClusterState.Draw -> {
-                viewModel.wonClusters.value!!.add(indexOfTable)
-            }
-        }
-        val winner = checkGameWinner()
-        if (winner != GameResults.Nothing) {
-            disableAllButtons()
-            setWinnerText(winner)
-        }
-    }
-
-    private fun setWinnerText(winner: GameResults) {
-        when (winner) {
-            GameResults.Nothing -> binding.textViewTurn.setText(R.string.error)
-            GameResults.Draw -> binding.textViewTurn.setText(R.string.draw)
-            GameResults.XWinner -> binding.textViewTurn.setText(R.string.winner_x)
-            GameResults.OWinner -> binding.textViewTurn.setText(R.string.winner_o)
-        }
-    }
-
-    private fun clusterStateEnumToGameWinnerEnum(clusterState: ClusterState): GameResults {
-        return when (clusterState) {
-            ClusterState.Nothing -> GameResults.Nothing
-            ClusterState.Draw -> GameResults.Nothing
-            ClusterState.O -> GameResults.OWinner
-            ClusterState.X -> GameResults.XWinner
-        }
-    }
-
-    private fun checkGameWinner(): GameResults {
-//        if (!viewModel.gameFieldCellStates.value!!.flatten()
-//                .all { state -> state != CellState.Nothing }
-//        ) return GameResults.Draw
-        val clusterStates = viewModel.clusterStates.value!!
-        if (clusterStates[0] != ClusterState.Nothing && clusterStates[0] == clusterStates[1] && clusterStates[0] == clusterStates[2]) return clusterStateEnumToGameWinnerEnum(
-            clusterStates[0]
-        )
-        if (clusterStates[3] != ClusterState.Nothing && clusterStates[3] == clusterStates[4] && clusterStates[3] == clusterStates[5]) return clusterStateEnumToGameWinnerEnum(
-            clusterStates[3]
-        )
-        if (clusterStates[6] != ClusterState.Nothing && clusterStates[6] == clusterStates[7] && clusterStates[6] == clusterStates[8]) return clusterStateEnumToGameWinnerEnum(
-            clusterStates[6]
-        )
-        if (clusterStates[0] != ClusterState.Nothing && clusterStates[0] == clusterStates[3] && clusterStates[0] == clusterStates[6]) return clusterStateEnumToGameWinnerEnum(
-            clusterStates[0]
-        )
-        if (clusterStates[1] != ClusterState.Nothing && clusterStates[1] == clusterStates[4] && clusterStates[1] == clusterStates[7]) return clusterStateEnumToGameWinnerEnum(
-            clusterStates[1]
-        )
-        if (clusterStates[2] != ClusterState.Nothing && clusterStates[2] == clusterStates[5] && clusterStates[2] == clusterStates[8]) return clusterStateEnumToGameWinnerEnum(
-            clusterStates[2]
-        )
-        if (clusterStates[0] != ClusterState.Nothing && clusterStates[0] == clusterStates[4] && clusterStates[0] == clusterStates[8]) return clusterStateEnumToGameWinnerEnum(
-            clusterStates[0]
-        )
-        if (clusterStates[2] != ClusterState.Nothing && clusterStates[2] == clusterStates[4] && clusterStates[2] == clusterStates[6]) return clusterStateEnumToGameWinnerEnum(
-            clusterStates[2]
-        )
-        if (clusterStates.all { clusterState -> clusterState != ClusterState.Nothing }) {
-            val numOfO = clusterStates.count { clusterState -> clusterState == ClusterState.O }
-            val numOfX = clusterStates.count { clusterState -> clusterState == ClusterState.X }
-            if (numOfX > numOfO) return GameResults.XWinner
-            if (numOfO > numOfX) return GameResults.OWinner
-            return GameResults.Draw
-        }
-        return GameResults.Nothing
-    }
-
-    private fun setTurnText() = with(binding) {
-        if (viewModel.currentTurn.value!! == Turn.X) textViewTurn.setText(R.string.turn_x)
-        else textViewTurn.setText(R.string.turn_o)
-    }
-
-    override fun setupView() = with(binding) {
-        viewModel = GameViewModel()
-        viewModel.currentTurn.value = Turn.X
-        viewModel.limitations.value = -1
-        viewModel.gameField.value = mutableListOf()
-        viewModel.gameFieldCellStates.value =
-            (MutableList(9) { MutableList(9) { CellState.Nothing } })
-        viewModel.wonClusters.value = mutableListOf()
-        viewModel.clusterStates.value = MutableList(9) { ClusterState.Nothing }
-        setupGameField(tableGame)
-        setTurnText()
-        val table = viewModel.gameField.value!!
-        for (i in viewModel.gameField.value!!.indices) {
-            for (j in table[i].indices) {
-                val button = table[i][j]
-                button.setOnClickListener {
-                    makeMove(i, j)
-                }
-            }
-        }
-    }
 }

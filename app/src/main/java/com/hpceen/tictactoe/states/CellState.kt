@@ -1,4 +1,4 @@
-package com.hpceen.tictactoe
+package com.hpceen.tictactoe.states
 
 enum class CellState {
     X, O, Nothing

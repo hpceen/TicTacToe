@@ -1,4 +1,4 @@
-package com.hpceen.tictactoe
+package com.hpceen.tictactoe.help_classes
 
 import android.os.Bundle
 import android.view.LayoutInflater
