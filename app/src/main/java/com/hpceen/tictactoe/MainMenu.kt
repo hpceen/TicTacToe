@@ -11,7 +11,7 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
 
     override fun setupView() = with(binding) {
         buttonOfflineGame.setOnClickListener {
-            navController.navigate(MainMenuDirections.actionMainMenuToOfflineGame(-1))
+            navController.navigate(MainMenuDirections.actionMainMenuToGame(Turn.X))
         }
         buttonOnlineGame.setOnClickListener {
             navController.navigate(MainMenuDirections.actionMainMenuToOnlineGame())

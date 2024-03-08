@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/cell_divider_background" android:state_enabled="true" />
+    <item android:drawable="@drawable/cell_divider_background_disabled" android:state_enabled="false" />
+    <item android:drawable="@drawable/cell_divider_background" />
+</selector>

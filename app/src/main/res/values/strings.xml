@@ -4,6 +4,8 @@
     <string name="offline_game">Local Game</string>
     <string name="turn_x">Ход X</string>
     <string name="turn_o">Ход O</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="winner_x">Победили X!</string>
+    <string name="winner_o">Победили O!</string>
+    <string name="draw">Ничья!</string>
+    <string name="error">Ты не должен был тут оказаться</string>
 </resources>

@@ -11,22 +11,10 @@
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu">
         <action
-            android:id="@+id/action_mainMenu_to_offlineGame"
-            app:destination="@id/offlineGame" />
-        <action
             android:id="@+id/action_mainMenu_to_onlineGame"
             app:destination="@id/onlineGame" />
-    </fragment>
-    <fragment
-        android:id="@+id/offlineGame"
-        android:name="com.hpceen.tictactoe.OfflineGame"
-        android:label="fragment_offline_game"
-        tools:layout="@layout/fragment_offline_game">
-        <argument
-            android:name="winner"
-            app:argType="integer" />
         <action
-            android:id="@+id/action_offlineGame_to_game"
+            android:id="@+id/action_mainMenu_to_game"
             app:destination="@id/game" />
     </fragment>
     <fragment
@@ -41,10 +29,7 @@
         android:label="fragment_game"
         tools:layout="@layout/fragment_game">
         <argument
-            android:name="turn"
-            app:argType="integer" />
-        <action
-            android:id="@+id/action_game_to_offlineGame"
-            app:destination="@id/offlineGame" />
+            android:name="firstTurn"
+            app:argType="com.hpceen.tictactoe.Turn" />
     </fragment>
 </navigation>
