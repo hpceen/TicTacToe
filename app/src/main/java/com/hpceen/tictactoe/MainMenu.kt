@@ -15,6 +15,7 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMainMenuBinding
         get() = FragmentMainMenuBinding::inflate
 
+    //Подготовка View
     override fun setupView() = with(binding) {
         buttonOnlineGame.setOnClickListener {
             Toast.makeText(context, "Еще не реализовано", Toast.LENGTH_SHORT).show()
@@ -27,6 +28,7 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
         }
     }
 
+    //popup Правил
     private fun showRulesPopup() {
         val dialog = Dialog(requireContext())
         val dialogBinding: PopupRulesBinding = PopupRulesBinding.inflate(dialog.layoutInflater)

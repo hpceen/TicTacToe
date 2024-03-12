@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 
+//Класс инициализирующий navController, а также binding
 abstract class ViewBindingFragment<VB : ViewBinding> : Fragment() {
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
