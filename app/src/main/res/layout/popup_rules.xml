@@ -9,6 +9,7 @@
         android:id="@+id/rules"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         android:text="@string/rules_full"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

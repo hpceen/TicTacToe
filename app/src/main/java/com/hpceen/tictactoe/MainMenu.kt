@@ -1,6 +1,7 @@
 package com.hpceen.tictactoe
 
 import android.app.Dialog
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.Window
@@ -32,6 +33,7 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
     private fun showRulesPopup() {
         val dialog = Dialog(requireContext())
         val dialogBinding: PopupRulesBinding = PopupRulesBinding.inflate(dialog.layoutInflater)
+        dialogBinding.rules.movementMethod = ScrollingMovementMethod()
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(dialogBinding.root)
         dialog.show()
