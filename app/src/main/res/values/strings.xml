@@ -5,10 +5,8 @@
     <string name="rules">Правила</string>
     <string name="sample_text">Sample Text</string>
     <string name="back">Назад</string>
-    <string name="turn_x">Ход X</string>
-    <string name="turn_o">Ход O</string>
-    <string name="winner_x">Победили X!</string>
-    <string name="winner_o">Победили O!</string>
+    <string name="turn">Ход</string>
+    <string name="winner">Победили</string>
     <string name="draw">Ничья!</string>
     <string name="rules_full">
         Каждое маленькое поле (3 × 3) называется малой доской, а большое (9 × 9) — глобальной доской.\n

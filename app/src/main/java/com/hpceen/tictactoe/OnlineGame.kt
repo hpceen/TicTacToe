@@ -12,4 +12,8 @@ class OnlineGame : ViewBindingFragment<FragmentOnlineGameBinding>() {
     override fun setupView() {
         TODO("Not yet implemented")
     }
+
+    override fun observe() {
+        TODO("Not yet implemented")
+    }
 }

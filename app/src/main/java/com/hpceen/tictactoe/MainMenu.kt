@@ -22,12 +22,14 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
             Toast.makeText(context, "Еще не реализовано", Toast.LENGTH_SHORT).show()
         }
         buttonOfflineGame.setOnClickListener {
-            navController.navigate(MainMenuDirections.actionMainMenuToGameNewArchitecture())
+            navController.navigate(MainMenuDirections.actionMainMenuToGame())
         }
         buttonRules.setOnClickListener {
             showRulesPopup()
         }
     }
+
+    override fun observe() {}
 
     //popup Правил
     private fun showRulesPopup() {

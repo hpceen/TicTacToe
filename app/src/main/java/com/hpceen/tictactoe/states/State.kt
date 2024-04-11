@@ -1,6 +1,6 @@
 package com.hpceen.tictactoe.states
 
-//Ход
-enum class Turn {
+//Состояние
+enum class State {
     X, O
 }

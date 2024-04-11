@@ -1,20 +1,29 @@
 package com.hpceen.tictactoe.help_classes
 
-import com.hpceen.tictactoe.states.CellState
-import com.hpceen.tictactoe.states.ClusterState
-import com.hpceen.tictactoe.states.Turn
+import androidx.lifecycle.MutableLiveData
+import com.hpceen.tictactoe.fieldsToCheck
+import com.hpceen.tictactoe.states.State
 
 //Клетка большого поля (кластер)
 //Конструктор принимает на вход список ячеек
 //Наследуется от Iterable<T>, для обеспечения функциональности циклов и т.д.
-class Cluster(private val listCells: MutableList<Cell>) : Iterable<Cell> {
+class Cluster(private val listCells: List<Cell>) : Iterable<Cell> {
 
     //Состояние кластера (по умолчанию "Ничего")
-    var state: ClusterState = ClusterState.Nothing
+    var state: MutableLiveData<State> = MutableLiveData()
 
-    //Свойство indices (для обеспечения итерирования по списку ячеек)
-    val indices: IntRange
-        get() = listCells.indices
+    init {
+        listCells.forEachIndexed { index, cell ->
+            cell.state.observeForever {
+                tryFinishCluster(index)
+            }
+        }
+        //Если поменялось state кластера, то меняем все state ячеек и делаем disable cluster
+        state.observeForever { clusterState ->
+            listCells.forEach { cell -> cell.changeImage(clusterState) }
+        }
+        disableCluster()
+    }
 
     //Метод возвращающий итератор для списка ячеек
     override fun iterator(): Iterator<Cell> {
@@ -27,65 +36,34 @@ class Cluster(private val listCells: MutableList<Cell>) : Iterable<Cell> {
     }
 
     //Попытка проверить завершенность кластера
-    fun tryFinish() {
-        //Проверка выигрыша в трех клетках i, j и k
-        fun isWin(
-            listStates: MutableList<CellState>, i: Int, j: Int, k: Int
-        ): Boolean {
-            if (listStates[i] == CellState.Nothing) return false
-            return listStates[i] == listStates[j] && listStates[i] == listStates[k]
+    private fun tryFinishCluster(cellIndex: Int) {
+        val fieldsToCheck = fieldsToCheck(cellIndex)
+        var winner: State? = null
+
+        //Возвращает выигрывавшего или null. Проверка идет в трех клетках i, j и k.
+        fun winner(
+            i: Int, j: Int, k: Int
+        ): State? {
+            if (!listCells[i].state.isInitialized || !listCells[j].state.isInitialized || !listCells[k].state.isInitialized) return null
+            if (listCells[i].state.value == listCells[j].state.value && listCells[i].state.value == listCells[k].state.value) return listCells[i].state.value
+            return null
         }
 
-        //Перевод статуса ячейки в статус кластера (enum)
-        fun cellStateToClusterState(
-            listStates: MutableList<CellState>, index: Int
-        ): ClusterState {
-            return when (listStates[index]) {
-                CellState.X -> ClusterState.X
-                CellState.O -> ClusterState.O
-                CellState.Nothing -> ClusterState.Nothing
-            }
+        fieldsToCheck.forEach {
+            val currentWinner = winner(it[0], it[1], it[2])
+            if (currentWinner != null) winner = currentWinner
         }
-
-        //Создание списка с состояниями ячеек
-        val listStates: MutableList<CellState> = mutableListOf()
-        for (cell in listCells) {
-            listStates.add(cell.state)
-        }
-        //Проверка всех рядов
-        state = if (isWin(listStates, 0, 1, 2)) cellStateToClusterState(listStates, 0)
-        else if (isWin(listStates, 3, 4, 5)) cellStateToClusterState(listStates, 3)
-        else if (isWin(listStates, 6, 7, 8)) cellStateToClusterState(listStates, 6)
-        //Проверка всех столбцов
-        else if (isWin(listStates, 0, 3, 6)) cellStateToClusterState(listStates, 0)
-        else if (isWin(listStates, 1, 4, 7)) cellStateToClusterState(listStates, 1)
-        else if (isWin(listStates, 2, 5, 8)) cellStateToClusterState(listStates, 2)
-        //Проверка всех диагоналей
-        else if (isWin(listStates, 0, 4, 8)) cellStateToClusterState(listStates, 0)
-        else if (isWin(listStates, 2, 4, 6)) cellStateToClusterState(listStates, 2)
-        //Проверка на ничью (если у всех ячеек статус != "Ничего", то ничья)
-        else if (listStates.all { cellState -> cellState != CellState.Nothing }) ClusterState.Draw
-        //Иначе ничего
-        else ClusterState.Nothing
+        if (winner != null) state.postValue(winner!!)
+        if (winner == null && listCells.all { cell -> cell.state.isInitialized }) disableCluster()
     }
 
-    //Выключить кластер (выключить все ячейки кластера)
+    //Выключить кластер (выключить все кнопки кластера)
     fun disableCluster() {
         listCells.forEach { cell -> cell.button.isEnabled = false }
     }
 
-    //Включить кластер (включить все ячейки кластера)
+    //Включить кластер (включить все кнопки кластера)
     fun enableCluster() {
         listCells.forEach { cell -> cell.button.isEnabled = true }
-    }
-
-    //Изменить все изображения ячеек в кластере (в зависимости от хода)
-    fun changeAllImages() {
-        when (state) {
-            ClusterState.X -> listCells.forEach { cell -> cell.changeImage(Turn.X) }
-            ClusterState.O -> listCells.forEach { cell -> cell.changeImage(Turn.O) }
-            ClusterState.Draw -> return
-            ClusterState.Nothing -> return
-        }
     }
 }

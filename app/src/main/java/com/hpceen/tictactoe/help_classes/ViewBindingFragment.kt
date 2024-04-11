@@ -30,7 +30,10 @@ abstract class ViewBindingFragment<VB : ViewBinding> : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
         setupView()
+        observe()
     }
+
+    abstract fun observe()
 
     abstract fun setupView()
 
@@ -38,4 +41,5 @@ abstract class ViewBindingFragment<VB : ViewBinding> : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

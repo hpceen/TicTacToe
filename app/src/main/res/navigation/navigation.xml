@@ -11,17 +11,17 @@
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu">
         <action
-            android:id="@+id/action_mainMenu_to_gameNewArchitecture"
-            app:destination="@id/gameNewArchitecture" />
+            android:id="@+id/action_mainMenu_to_game"
+            app:destination="@id/game" />
     </fragment>
 
     <fragment
-        android:id="@+id/gameNewArchitecture"
+        android:id="@+id/game"
         android:name="com.hpceen.tictactoe.Game"
-        android:label="fragment_game_new_architecture"
+        android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
         <action
-            android:id="@+id/action_gameNewArchitecture_to_mainMenu"
+            android:id="@+id/action_game_to_mainMenu"
             app:destination="@id/mainMenu" />
     </fragment>
 </navigation>

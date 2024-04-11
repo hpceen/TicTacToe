@@ -11,10 +11,7 @@ import com.hpceen.tictactoe.databinding.FragmentGameBinding
 import com.hpceen.tictactoe.help_classes.Cell
 import com.hpceen.tictactoe.help_classes.Cluster
 import com.hpceen.tictactoe.help_classes.ViewBindingFragment
-import com.hpceen.tictactoe.states.CellState
-import com.hpceen.tictactoe.states.ClusterState
-import com.hpceen.tictactoe.states.GameState
-import com.hpceen.tictactoe.states.Turn
+import com.hpceen.tictactoe.states.State
 
 class Game : ViewBindingFragment<FragmentGameBinding>() {
     private var viewModel = GameViewModel()
@@ -27,17 +24,73 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
         buttonBack.isEnabled = false
         buttonBack.isVisible = false
         buttonBack.setOnClickListener {
-            navController.navigate(GameDirections.actionGameNewArchitectureToMainMenu())
+            navController.navigate(GameDirections.actionGameToMainMenu())
         }
-        textViewTurn.setText(R.string.turn_x)
-        val gameField = viewModel.gameField.value!!
-        for (clusterIndex in gameField.indices) {
-            for (cellIndex in gameField[clusterIndex].indices) {
-                gameField[clusterIndex][cellIndex].button.setOnClickListener {
+
+        val gameField = viewModel.gameField
+        gameField.forEachIndexed { clusterIndex, cluster ->
+            cluster.forEachIndexed { cellIndex, cell ->
+                cell.button.setOnClickListener {
                     makeMove(clusterIndex, cellIndex)
                 }
             }
         }
+    }
+
+    //Создание наблюдателей для всех LiveData перменных
+    override fun observe() = with(viewModel) {
+        //Изменение надписи хода, при изменение хода
+        currentTurn.observe(this@Game) {
+            binding.turnImage.setImageResource(
+                when (it) {
+                    State.X -> R.drawable.cross
+                    State.O -> R.drawable.circle
+                    //Чтобы не вылазило предупреждения (гипотетически недостижимое состояние)
+                    null -> R.drawable.ic_launcher_background
+                }
+            )
+        }
+        //Изменение надписи, при изменении состояния игры
+        gameState.observe(this@Game) {
+            binding.textViewTurn.setText(
+                when (it) {
+                    null -> {
+                        binding.turnImage.isVisible = false
+                        R.string.draw
+                    }
+
+                    else -> R.string.winner
+                }
+            )
+            binding.buttonBack.isEnabled = true
+            binding.buttonBack.isVisible = true
+            gameField.forEach { cluster -> cluster.disableCluster() }
+        }
+        //Изменение состояния поля при изменении допустимых для хода кластеров
+        allowedClusters.observeForever {
+            gameField.forEach { cluster -> cluster.disableCluster() }
+            it.forEach { index -> gameField[index].enableCluster() }
+        }
+        //Логика при изменении состояния клетки и кластера
+        gameField.forEachIndexed { clusterIndex, cluster ->
+            //При изменении состояния кластера изменяется set завершенных кластеров
+            //и производится попытка завершения игры
+            cluster.state.observeForever {
+                finishedClusters.add(clusterIndex)
+                tryFinishGame(clusterIndex)
+            }
+            cluster.forEachIndexed { cellIndex, cell ->
+                //При изменении состояния ячейки изменяется set доступных для хода кластеров
+                cell.state.observeForever {
+                    allowedClusters.postValue(
+                        if (cellIndex in finishedClusters) ((0..8).toSet() subtract finishedClusters)
+                        else setOf(cellIndex)
+                    )
+                }
+            }
+        }
+        //Чтобы начать игру изменяем значение переменной текущего хода
+        viewModel.currentTurn.postValue(State.X)
     }
 
     //Совершить ход
@@ -46,141 +99,49 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
         nextTurn()
     }
 
-    //Следующий ход
-    private fun nextTurn() = with(binding) {
-        when (viewModel.gameState.value!!) {
-            GameState.XWinner -> {
-                textViewTurn.setText(R.string.winner_x)
-                return
-            }
-
-            GameState.OWinner -> {
-                textViewTurn.setText(R.string.winner_o)
-                return
-            }
-
-            GameState.Draw -> {
-                textViewTurn.setText(R.string.draw)
-                return
-            }
-
-            GameState.Nothing -> {}
-        }
-        viewModel.currentTurn.value = when (viewModel.currentTurn.value!!) {
-            Turn.X -> Turn.O
-            Turn.O -> Turn.X
-        }
-        if (viewModel.currentTurn.value!! == Turn.X) textViewTurn.setText(R.string.turn_x)
-        if (viewModel.currentTurn.value!! == Turn.O) textViewTurn.setText(R.string.turn_o)
+    //Переключение хода
+    private fun nextTurn() = with(viewModel) {
+        currentTurn.postValue(if (currentTurn.value == State.X) State.O else State.X)
     }
 
     //Изменение состояния игры (параметры - индекс кластера и индекс ячейки в которую был совершен ход)
-    private fun changeState(clusterIndex: Int, cellIndex: Int) = with(binding) {
-        val gameField = viewModel.gameField.value!!
-        changeCellState(gameField[clusterIndex][cellIndex])
-        changeFinishedClusters(clusterIndex, cellIndex)
-        changeAllowedClusters(clusterIndex, cellIndex)
-        viewModel.gameState.value = tryFinish()
-        changeGameFieldState()
-    }
-
-    //Изменение состояния ячейки
-    private fun changeCellState(cell: Cell) {
-        //Перевод хода в состояние ячейки
-        fun turnToCellState(turn: Turn): CellState {
-            return when (turn) {
-                Turn.X -> CellState.X
-                Turn.O -> CellState.O
-            }
-        }
-
-        cell.button.isClickable = false
-        cell.changeImage(viewModel.currentTurn.value!!)
-        cell.state = turnToCellState(viewModel.currentTurn.value!!)
-    }
-
-    //Изменение списка досутпных для хода кластеров
-    private fun changeAllowedClusters(clusterIndex: Int, cellIndex: Int) {
-        if (cellIndex in viewModel.finishedClusters.value!!) viewModel.allowedClusters.value =
-            ((0..8) subtract viewModel.finishedClusters.value!!).toMutableSet()
-        else {
-            viewModel.allowedClusters.value!!.clear()
-            viewModel.allowedClusters.value!!.add(cellIndex)
-        }
-
-    }
-
-    //Изменение списка завершенных кластеров
-    private fun changeFinishedClusters(clusterIndex: Int, cellIndex: Int) {
-        val cluster = viewModel.gameField.value!![clusterIndex]
-        cluster.tryFinish()
-        if (cluster.state != ClusterState.Nothing) {
-            viewModel.finishedClusters.value!!.add(clusterIndex)
-            cluster.changeAllImages()
-        }
+    private fun changeState(clusterIndex: Int, cellIndex: Int) = with(viewModel) {
+        gameField[clusterIndex][cellIndex].state.postValue(if (currentTurn.value == State.X) State.X else State.O)
     }
 
     //Попытка завершения игры
-    private fun tryFinish(): GameState {
-        //Проверка выигрыша на кластерах i, j и k
-        fun isWin(
-            listStates: MutableList<ClusterState>, i: Int, j: Int, k: Int
-        ): Boolean {
-            if (listStates[i] == ClusterState.Nothing) return false
-            return listStates[i] == listStates[j] && listStates[i] == listStates[k]
+    private fun tryFinishGame(clusterIndex: Int) {
+        //Список полей для проверки
+        //(некая оптимизация, чтобы каждый раз не проверять все выигрышные)
+        val fieldsToCheck = fieldsToCheck(clusterIndex)
+        var winner: State? = null
+        val gameField = viewModel.gameField
+
+        //Возвращает выигрывавшего или null. Проверка идет в трех клетках i, j и k.
+        fun winner(
+            i: Int, j: Int, k: Int
+        ): State? {
+            if (!gameField[i].state.isInitialized || !gameField[j].state.isInitialized || !gameField[k].state.isInitialized) return null
+            if (gameField[i].state.value == gameField[j].state.value && gameField[i].state.value == gameField[k].state.value) return gameField[i].state.value
+            return null
         }
 
-        //Перевод состояния кластера в состояние игры
-        fun clusterStateToGameState(
-            listStates: MutableList<ClusterState>, index: Int
-        ): GameState {
-            return when (listStates[index]) {
-                ClusterState.X -> GameState.XWinner
-                ClusterState.O -> GameState.OWinner
-                ClusterState.Draw -> GameState.Draw
-                ClusterState.Nothing -> GameState.Nothing
+        //Логика выигрыша
+        fieldsToCheck.forEach {
+            val currentWinner = winner(it[0], it[1], it[2])
+            if (currentWinner != null) winner = currentWinner
+        }
+        if (winner != null) {
+            viewModel.gameState.postValue(winner!!)
+        }
+        if (winner == null && gameField.all { cluster -> cluster.state.isInitialized }) {
+            val numberCrossWinner = gameField.count { cluster -> cluster.state.value == State.X }
+            val numberCircleWinner = gameField.count { cluster -> cluster.state.value == State.O }
+            if (numberCrossWinner == numberCircleWinner) {
+                viewModel.gameState.postValue(null)
             }
-        }
-
-        val listStates = mutableListOf<ClusterState>()
-        for (cluster in viewModel.gameField.value!!) listStates.add(cluster.state)
-        //Проверка рядов
-        if (isWin(listStates, 0, 1, 2)) return clusterStateToGameState(listStates, 0)
-        if (isWin(listStates, 3, 4, 5)) return clusterStateToGameState(listStates, 3)
-        if (isWin(listStates, 6, 7, 8)) return clusterStateToGameState(listStates, 6)
-        //Проверка столбцов
-        if (isWin(listStates, 0, 3, 6)) return clusterStateToGameState(listStates, 0)
-        if (isWin(listStates, 1, 4, 7)) return clusterStateToGameState(listStates, 1)
-        if (isWin(listStates, 2, 5, 8)) return clusterStateToGameState(listStates, 2)
-        //Проверка диагоналей
-        if (isWin(listStates, 0, 4, 8)) return clusterStateToGameState(listStates, 0)
-        if (isWin(listStates, 2, 4, 6)) return clusterStateToGameState(listStates, 2)
-        //Проверка ничьи или выигрыша по количеству
-        if (listStates.all { clusterState -> clusterState != ClusterState.Nothing }) {
-            val xWinnerCount = listStates.count { clusterState -> clusterState == ClusterState.X }
-            val oWinnerCount = listStates.count { clusterState -> clusterState == ClusterState.O }
-            if (xWinnerCount > oWinnerCount) return GameState.XWinner
-            if (oWinnerCount > xWinnerCount) return GameState.OWinner
-            return GameState.Draw
-        }
-        return GameState.Nothing
-    }
-
-    //Изменение состояния игрового поля
-    private fun changeGameFieldState() = with(binding) {
-        val gameField = viewModel.gameField.value!!
-        //Изменения доступности кластеров в соостветствии с доступными для хода кластерами
-        if (viewModel.gameState.value!! == GameState.Nothing) {
-            gameField.forEach { cluster -> cluster.disableCluster() }
-            for (clusterIndex in viewModel.allowedClusters.value!!) {
-                gameField[clusterIndex].enableCluster()
-            }
-        }
-        //Завершение игры
-        else {
-            gameField.forEach { cluster -> cluster.disableCluster() }
-            buttonBack.isEnabled = true
-            buttonBack.isVisible = true
+            if (numberCrossWinner > numberCircleWinner) viewModel.gameState.postValue(State.X)
+            else viewModel.gameState.postValue(State.O)
         }
     }
 
@@ -200,7 +161,7 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
                                 }
                             }
                         }
-                        viewModel.gameField.value!!.add(Cluster(listCells))
+                        viewModel.gameField.add(Cluster(listCells))
                     }
                 }
             }
