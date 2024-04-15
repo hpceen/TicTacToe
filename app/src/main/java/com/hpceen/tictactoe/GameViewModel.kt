@@ -2,7 +2,7 @@ package com.hpceen.tictactoe
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hpceen.tictactoe.help_classes.Cluster
+import com.hpceen.tictactoe.help.Cluster
 import com.hpceen.tictactoe.states.State
 
 class GameViewModel : ViewModel() {

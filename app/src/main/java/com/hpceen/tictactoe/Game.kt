@@ -1,22 +1,21 @@
 package com.hpceen.tictactoe
 
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TableLayout
 import android.widget.TableRow
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.hpceen.tictactoe.databinding.FragmentGameBinding
-import com.hpceen.tictactoe.help_classes.Cell
-import com.hpceen.tictactoe.help_classes.Cluster
-import com.hpceen.tictactoe.help_classes.ViewBindingFragment
+import com.hpceen.tictactoe.help.Cell
+import com.hpceen.tictactoe.help.Cluster
+import com.hpceen.tictactoe.help.ViewBindingFragment
+import com.hpceen.tictactoe.help.fieldsToCheck
 import com.hpceen.tictactoe.states.State
 
 class Game : ViewBindingFragment<FragmentGameBinding>() {
     private var viewModel = GameViewModel()
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentGameBinding
-        get() = FragmentGameBinding::inflate
+    override fun provideBinding(inflater: LayoutInflater) = FragmentGameBinding.inflate(inflater)
 
     //Подготовка View
     override fun setupView() = with(binding) {

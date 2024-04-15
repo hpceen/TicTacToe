@@ -1,7 +1,6 @@
-package com.hpceen.tictactoe.help_classes
+package com.hpceen.tictactoe.help
 
 import androidx.lifecycle.MutableLiveData
-import com.hpceen.tictactoe.fieldsToCheck
 import com.hpceen.tictactoe.states.State
 
 //Клетка большого поля (кластер)

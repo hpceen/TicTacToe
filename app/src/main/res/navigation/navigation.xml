@@ -13,15 +13,24 @@
         <action
             android:id="@+id/action_mainMenu_to_game"
             app:destination="@id/game" />
+        <action
+            android:id="@+id/action_mainMenu_to_connection"
+            app:destination="@id/connection" />
     </fragment>
 
     <fragment
         android:id="@+id/game"
         android:name="com.hpceen.tictactoe.Game"
         android:label="fragment_game"
-        tools:layout="@layout/fragment_game" >
+        tools:layout="@layout/fragment_game">
         <action
             android:id="@+id/action_game_to_mainMenu"
             app:destination="@id/mainMenu" />
     </fragment>
+
+    <fragment
+        android:id="@+id/connection"
+        android:name="com.hpceen.tictactoe.Connection"
+        android:label="fragment_connection"
+        tools:layout="@layout/fragment_connection" />
 </navigation>

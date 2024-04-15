@@ -1,4 +1,4 @@
-package com.hpceen.tictactoe.help_classes
+package com.hpceen.tictactoe.help
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,24 +11,28 @@ import androidx.viewbinding.ViewBinding
 
 //Класс инициализирующий navController, а также binding
 abstract class ViewBindingFragment<VB : ViewBinding> : Fragment() {
-    private var _binding: ViewBinding? = null
-    abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
-    protected lateinit var navController: NavController
+    protected val navController: NavController by lazy { findNavController() }
+    private var bindingRef: VB? = null
 
-    @Suppress("UNCHECKED_CAST")
     protected val binding: VB
-        get() = _binding as VB
+        get() = bindingRef.let { bd ->
+            if (bd != null) {
+                bd
+            } else {
+                val newBd = provideBinding(layoutInflater)
+                bindingRef = newBd
+                newBd
+            }
+        }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        _binding = bindingInflater.invoke(inflater, container, false)
-        return requireNotNull(_binding).root
-    }
+    ): View? = binding.root
 
+    protected abstract fun provideBinding(inflater: LayoutInflater): VB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = findNavController()
         setupView()
         observe()
     }
@@ -39,7 +43,6 @@ abstract class ViewBindingFragment<VB : ViewBinding> : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
     }
 
 }

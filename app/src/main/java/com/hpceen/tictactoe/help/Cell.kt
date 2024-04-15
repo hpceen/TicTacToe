@@ -1,4 +1,4 @@
-package com.hpceen.tictactoe.help_classes
+package com.hpceen.tictactoe.help
 
 import android.widget.ImageButton
 import androidx.lifecycle.MutableLiveData

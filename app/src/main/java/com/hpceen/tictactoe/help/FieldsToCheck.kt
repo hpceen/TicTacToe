@@ -1,4 +1,4 @@
-package com.hpceen.tictactoe
+package com.hpceen.tictactoe.help
 
 fun fieldsToCheck(index: Int): MutableList<List<Int>> {
     val list: MutableList<List<Int>> = mutableListOf()

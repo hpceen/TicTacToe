@@ -3,23 +3,20 @@ package com.hpceen.tictactoe
 import android.app.Dialog
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
 import com.hpceen.tictactoe.databinding.FragmentMainMenuBinding
 import com.hpceen.tictactoe.databinding.PopupRulesBinding
-import com.hpceen.tictactoe.help_classes.ViewBindingFragment
+import com.hpceen.tictactoe.help.ViewBindingFragment
 
 
 class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
-
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMainMenuBinding
-        get() = FragmentMainMenuBinding::inflate
+    override fun provideBinding(inflater: LayoutInflater) =
+        FragmentMainMenuBinding.inflate(inflater)
 
     //Подготовка View
     override fun setupView() = with(binding) {
         buttonOnlineGame.setOnClickListener {
-            Toast.makeText(context, "Еще не реализовано", Toast.LENGTH_SHORT).show()
+            navController.navigate(MainMenuDirections.actionMainMenuToConnection())
         }
         buttonOfflineGame.setOnClickListener {
             navController.navigate(MainMenuDirections.actionMainMenuToGame())
