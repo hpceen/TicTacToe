@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation"
+    android:id="@+id/navigation_offline"
     app:startDestination="@id/mainMenu">
 
     <fragment
@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_mainMenu_to_game"
             app:destination="@id/game" />
-        <action
-            android:id="@+id/action_mainMenu_to_connection"
-            app:destination="@id/connection" />
     </fragment>
 
     <fragment
@@ -27,10 +24,4 @@
             android:id="@+id/action_game_to_mainMenu"
             app:destination="@id/mainMenu" />
     </fragment>
-
-    <fragment
-        android:id="@+id/connection"
-        android:name="com.hpceen.tictactoe.Connection"
-        android:label="fragment_connection"
-        tools:layout="@layout/fragment_connection" />
 </navigation>

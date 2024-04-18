@@ -8,33 +8,23 @@ import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pManager
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
-import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.hpceen.tictactoe.databinding.FragmentConnectionBinding
-import com.hpceen.tictactoe.help.SendReceive
 import com.hpceen.tictactoe.help.ViewBindingFragment
 import com.hpceen.tictactoe.help.WiFiDirectBroadcastReceiver
-import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.ServerSocket
-import java.net.Socket
+
 
 class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
-    val viewModel = ConnectionViewModel()
     private lateinit var context: Context
-    private lateinit var sendReceive: SendReceive
-    lateinit var handler: Handler
-    lateinit var server: Server
-    lateinit var client: Client
     override fun provideBinding(inflater: LayoutInflater) =
         FragmentConnectionBinding.inflate(inflater)
 
-    val wifiP2pManager: WifiP2pManager? by lazy(LazyThreadSafetyMode.NONE) {
+    private val wifiP2pManager: WifiP2pManager? by lazy {
         activity?.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
     }
-
 
     lateinit var peerListListener: WifiP2pManager.PeerListListener
     lateinit var connectionInfoListener: ConnectionInfoListener
@@ -56,44 +46,46 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
         this.context = context
     }
 
-    class Server(private val sendReceive: SendReceive) : Thread() {
-        override fun run() {
-            super.run()
-            try {
-                sendReceive.start()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        context.registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
     }
 
-    class Client(private val sendReceive: SendReceive) : Thread() {
-
-        override fun run() {
-            super.run()
-            try {
-                sendReceive.start()
-            } catch (e: IOException) {
-                e.printStackTrace()
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("ConnectionFragment", "Fragment destroyed")
+        context.unregisterReceiver(receiver)
+        wifiP2pManager?.removeGroup(channel, object : WifiP2pManager.ActionListener {
+            override fun onFailure(reason: Int) {
+                Log.d("Disconnect", "Disconnect failed. Reason :$reason")
             }
-        }
+
+            override fun onSuccess() {
+                Log.d("Disconnect", "Disconnect success.")
+            }
+        })
     }
 
     @SuppressLint("MissingPermission")
     override fun setupView() {
-        channel = wifiP2pManager?.initialize(activity, activity?.mainLooper, null)
+        channel = wifiP2pManager?.initialize(requireActivity(), requireActivity().mainLooper, null)
         channel?.also { channel ->
             receiver = WiFiDirectBroadcastReceiver(wifiP2pManager!!, channel, this)
         }
-        context.registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
         binding.discover.setOnClickListener {
             wifiP2pManager?.discoverPeers(channel, object : WifiP2pManager.ActionListener {
                 override fun onSuccess() {
-                    binding.connectionStatus.text = "Discovery Started"
+                    Toast.makeText(
+                        requireContext(), "Discovery Started", Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onFailure(reason: Int) {
-                    binding.connectionStatus.text = "Discovery starting failure reason $reason"
+                    Toast.makeText(
+                        requireContext(),
+                        "Discovery starting failure due reason $reason",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         }
@@ -115,52 +107,50 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                 }
             }
             if (peers.size == 0) {
-                Toast.makeText(requireContext(), "No device found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "No devices found", Toast.LENGTH_SHORT).show()
             }
-        }
-        handler = Handler(activity?.mainLooper!!) { msg ->
-            when (msg.what) {
-                MESSAGE_READ -> {
-                    val tempMessage = String(msg.obj as ByteArray, 0, msg.arg1)
-                    binding.message.text = tempMessage
-                }
-            }
-            true
         }
         connectionInfoListener = ConnectionInfoListener { info ->
             if (info.groupFormed) {
+                Toast.makeText(
+                    requireContext(), "Connected", Toast.LENGTH_LONG
+                ).show()
                 if (info.isGroupOwner) {
-                    binding.connectionStatus.text = "Server"
-                    val socket = ServerSocket(8888).accept()
-                    sendReceive = SendReceive(socket, handler)
-                    server = Server(sendReceive)
-                    server.start()
-                } else {
-                    binding.connectionStatus.text = "Client"
-                    val socket = Socket().apply {
-                        connect(InetSocketAddress(info.groupOwnerAddress, 8888))
+                    Toast.makeText(
+                        requireContext(), "Group Formed. Group Owner.", Toast.LENGTH_LONG
+                    ).show()
+                    binding.start.setOnClickListener {
+                        navController.navigate(
+                            ConnectionDirections.actionConnectionToOnlineServerGame()
+                        )
                     }
-                    sendReceive = SendReceive(socket, handler)
-                    client = Client(sendReceive)
-                    client.start()
+                } else {
+                    Toast.makeText(requireContext(), "Group Formed.", Toast.LENGTH_SHORT).show()
+                    binding.start.setOnClickListener {
+                        navController.navigate(
+                            ConnectionDirections.actionConnectionToOnlineClientGame(info.groupOwnerAddress)
+                        )
+                    }
                 }
-                viewModel.isConnected.postValue(true)
             }
         }
         binding.listView.setOnItemClickListener { _, _, position, _ ->
             val device = peers[position]
-            val config = WifiP2pConfig().apply { deviceAddress = device.deviceAddress }
+            val config = WifiP2pConfig().apply {
+                deviceAddress = device.deviceAddress
+            }
             wifiP2pManager?.connect(channel, config, object : WifiP2pManager.ActionListener {
                 override fun onSuccess() {
+                    binding.listView.isClickable = false
                     Toast.makeText(
-                        requireContext(), "Connected to ${device.deviceName}", Toast.LENGTH_SHORT
+                        requireContext(), "Connecting to ${device.deviceName}", Toast.LENGTH_SHORT
                     ).show()
                 }
 
                 override fun onFailure(reason: Int) {
                     Toast.makeText(
                         requireContext(),
-                        "Can't connect to ${device.deviceName}",
+                        "Can't connect to ${device.deviceName}, Reason ${reason}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -168,22 +158,10 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
         }
     }
 
-    override fun observe() = with(viewModel) {
-        isConnected.observe(this@Connection) {
-            binding.send.setOnClickListener {
-                val message = binding.writeMessage.text.toString()
-                sendReceive.write(message.toByteArray())
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        channel?.close()
-        context.unregisterReceiver(receiver)
-    }
+    override fun observe() {}
 
     companion object {
         const val MESSAGE_READ = 1
+        const val PORT = 8080
     }
 }

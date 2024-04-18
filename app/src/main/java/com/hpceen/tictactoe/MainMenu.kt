@@ -1,6 +1,7 @@
 package com.hpceen.tictactoe
 
 import android.app.Dialog
+import android.content.Intent
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.Window
@@ -16,7 +17,7 @@ class MainMenu : ViewBindingFragment<FragmentMainMenuBinding>() {
     //Подготовка View
     override fun setupView() = with(binding) {
         buttonOnlineGame.setOnClickListener {
-            navController.navigate(MainMenuDirections.actionMainMenuToConnection())
+            startActivity(Intent(requireActivity(), OnlineActivity::class.java))
         }
         buttonOfflineGame.setOnClickListener {
             navController.navigate(MainMenuDirections.actionMainMenuToGame())

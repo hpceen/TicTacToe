@@ -12,11 +12,6 @@ class Cluster(private val listCells: List<Cell>) : Iterable<Cell> {
     var state: MutableLiveData<State> = MutableLiveData()
 
     init {
-        listCells.forEachIndexed { index, cell ->
-            cell.state.observeForever {
-                tryFinishCluster(index)
-            }
-        }
         //Если поменялось state кластера, то меняем все state ячеек и делаем disable cluster
         state.observeForever { clusterState ->
             listCells.forEach { cell -> cell.changeImage(clusterState) }
@@ -35,7 +30,9 @@ class Cluster(private val listCells: List<Cell>) : Iterable<Cell> {
     }
 
     //Попытка проверить завершенность кластера
-    private fun tryFinishCluster(cellIndex: Int) {
+    //КОСТЫЛЬ
+    //Если возвращает true, то необходимо добавить этот кластер в завершенные
+    fun tryFinishCluster(cellIndex: Int): Boolean {
         val fieldsToCheck = fieldsToCheck(cellIndex)
         var winner: State? = null
 
@@ -52,8 +49,14 @@ class Cluster(private val listCells: List<Cell>) : Iterable<Cell> {
             val currentWinner = winner(it[0], it[1], it[2])
             if (currentWinner != null) winner = currentWinner
         }
-        if (winner != null) state.postValue(winner!!)
-        if (winner == null && listCells.all { cell -> cell.state.isInitialized }) disableCluster()
+        if (winner != null) {
+            state.postValue(winner!!)
+            return true
+        }
+        if (listCells.all { cell -> cell.state.isInitialized }) {
+            return true
+        }
+        return false
     }
 
     //Выключить кластер (выключить все кнопки кластера)

@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
-    tools:context=".MainActivity">
+    tools:context=".OnlineActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navigation_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation_offline" />
+        app:defaultNavHost="false"
+        app:navGraph="@navigation/navigation_online" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

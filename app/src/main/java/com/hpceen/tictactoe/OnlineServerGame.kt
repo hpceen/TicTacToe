@@ -1,22 +1,27 @@
 package com.hpceen.tictactoe
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.TableLayout
 import android.widget.TableRow
+import android.widget.Toast
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import com.hpceen.tictactoe.databinding.FragmentGameBinding
+import com.hpceen.tictactoe.databinding.FragmentOnlineServerGameBinding
 import com.hpceen.tictactoe.help.Cell
 import com.hpceen.tictactoe.help.Cluster
+import com.hpceen.tictactoe.help.Server
 import com.hpceen.tictactoe.help.ViewBindingFragment
 import com.hpceen.tictactoe.help.fieldsToCheck
 import com.hpceen.tictactoe.states.State
 
-class Game : ViewBindingFragment<FragmentGameBinding>() {
-    private val viewModel: GameViewModel by viewModels()
-    override fun provideBinding(inflater: LayoutInflater) = FragmentGameBinding.inflate(inflater)
+class OnlineServerGame : ViewBindingFragment<FragmentOnlineServerGameBinding>() {
+    private val viewModel: OnlineGameViewModel by viewModels()
+    private lateinit var server: Server
+    override fun provideBinding(inflater: LayoutInflater) =
+        FragmentOnlineServerGameBinding.inflate(inflater)
 
     //Подготовка View
     override fun setupView() = with(binding) {
@@ -24,23 +29,29 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
         buttonBack.isEnabled = false
         buttonBack.isVisible = false
         buttonBack.setOnClickListener {
-            navController.navigate(GameDirections.actionGameToMainMenu())
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
         }
 
-        val gameField = viewModel.gameField
-        gameField.forEachIndexed { clusterIndex, cluster ->
-            cluster.forEachIndexed { cellIndex, cell ->
-                cell.button.setOnClickListener {
-                    makeMove(clusterIndex, cellIndex)
-                }
-            }
-        }
+        server = Server(viewModel)
     }
 
     //Создание наблюдателей для всех LiveData перменных
     override fun observe() = with(viewModel) {
+        server.isInitialised.observe(this@OnlineServerGame) {
+            Toast.makeText(requireContext(), "CommunicationThread initialised", Toast.LENGTH_SHORT)
+                .show()
+            gameField.forEachIndexed { clusterIndex, cluster ->
+                cluster.forEachIndexed { cellIndex, cell ->
+                    cell.button.setOnClickListener {
+                        server.write("$clusterIndex $cellIndex".toByteArray())
+                        makeMove(clusterIndex, cellIndex)
+                        disableAllClusters()
+                    }
+                }
+            }
+        }
         //Изменение надписи хода, при изменение хода
-        currentTurn.observe(this@Game) {
+        currentTurn.observe(this@OnlineServerGame) {
             binding.turnImage.setImageResource(
                 when (it) {
                     State.X -> R.drawable.cross
@@ -51,7 +62,7 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
             )
         }
         //Изменение надписи, при изменении состояния игры
-        gameState.observe(this@Game) {
+        gameState.observe(this@OnlineServerGame) {
             binding.textViewTurn.setText(
                 when (it) {
                     null -> {
@@ -83,11 +94,19 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
                         tryFinishGame(clusterIndex)
                     }
                     allowedClusters.postValue(
-                        if (cellIndex in finishedClusters) ((0..8).toSet() subtract finishedClusters)
-                        else setOf(cellIndex)
+                        if (currentTurn.value!! != PLAYER)
+                            if (cellIndex in finishedClusters) ((0..8).toSet() subtract finishedClusters)
+                            else setOf(cellIndex)
+                        else setOf()
                     )
                 }
             }
+        }
+        turn.observe(this@OnlineServerGame) {
+            Toast.makeText(
+                requireContext(), "X сходили ${it.first} ${it.second}", Toast.LENGTH_SHORT
+            ).show()
+            makeMove(it.first, it.second)
         }
         //Чтобы начать игру изменяем значение переменной текущего хода
         viewModel.currentTurn.postValue(State.X)
@@ -97,6 +116,10 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
     private fun makeMove(clusterIndex: Int, cellIndex: Int) {
         changeState(clusterIndex, cellIndex)
         nextTurn()
+    }
+
+    private fun disableAllClusters() {
+        viewModel.gameField.forEach { it.disableCluster() }
     }
 
     //Переключение хода
@@ -168,4 +191,12 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        server.closeConnection()
+    }
+
+    companion object {
+        val PLAYER = State.X
+    }
 }
