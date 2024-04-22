@@ -63,16 +63,22 @@ class OnlineServerGame : ViewBindingFragment<FragmentOnlineServerGameBinding>() 
         }
         //Изменение надписи, при изменении состояния игры
         gameState.observe(this@OnlineServerGame) {
-            binding.textViewTurn.setText(
-                when (it) {
-                    null -> {
-                        binding.turnImage.isVisible = false
-                        R.string.draw
-                    }
-
-                    else -> R.string.winner
+            when (it) {
+                null -> {
+                    binding.turnImage.isVisible = false
+                    R.string.draw
                 }
-            )
+
+                State.X -> {
+                    binding.textViewTurn.setText(R.string.winner)
+                    binding.turnImage.setImageResource(R.drawable.cross)
+                }
+
+                State.O -> {
+                    binding.textViewTurn.setText(R.string.winner)
+                    binding.turnImage.setImageResource(R.drawable.circle)
+                }
+            }
             binding.buttonBack.isEnabled = true
             binding.buttonBack.isVisible = true
             gameField.forEach { cluster -> cluster.disableCluster() }
@@ -81,6 +87,11 @@ class OnlineServerGame : ViewBindingFragment<FragmentOnlineServerGameBinding>() 
         allowedClusters.observeForever {
             gameField.forEach { cluster -> cluster.disableCluster() }
             it.forEach { index -> gameField[index].enableCluster() }
+        }
+        gameField.forEachIndexed { clusterIndex, cluster ->
+            cluster.state.observe(this@OnlineServerGame) {
+                tryFinishGame(clusterIndex)
+            }
         }
         //Логика при изменении состояния клетки и кластера
         gameField.forEachIndexed { clusterIndex, cluster ->
@@ -91,13 +102,12 @@ class OnlineServerGame : ViewBindingFragment<FragmentOnlineServerGameBinding>() 
                 cell.state.observeForever {
                     if (cluster.tryFinishCluster(cellIndex)) {
                         finishedClusters.add(clusterIndex)
-                        tryFinishGame(clusterIndex)
                     }
                     allowedClusters.postValue(
-                        if (currentTurn.value!! != PLAYER)
+                        if (currentTurn.value!! != PLAYER) {
                             if (cellIndex in finishedClusters) ((0..8).toSet() subtract finishedClusters)
                             else setOf(cellIndex)
-                        else setOf()
+                        } else setOf()
                     )
                 }
             }

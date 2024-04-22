@@ -52,24 +52,35 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
         }
         //Изменение надписи, при изменении состояния игры
         gameState.observe(this@Game) {
-            binding.textViewTurn.setText(
                 when (it) {
                     null -> {
                         binding.turnImage.isVisible = false
                         R.string.draw
                     }
 
-                    else -> R.string.winner
+                    State.X -> {
+                        binding.textViewTurn.setText(R.string.winner)
+                        binding.turnImage.setImageResource(R.drawable.cross)
+                    }
+
+                    State.O -> {
+                        binding.textViewTurn.setText(R.string.winner)
+                        binding.turnImage.setImageResource(R.drawable.circle)
+                    }
                 }
-            )
             binding.buttonBack.isEnabled = true
             binding.buttonBack.isVisible = true
             gameField.forEach { cluster -> cluster.disableCluster() }
         }
         //Изменение состояния поля при изменении допустимых для хода кластеров
-        allowedClusters.observeForever {
+        allowedClusters.observe(this@Game) {
             gameField.forEach { cluster -> cluster.disableCluster() }
             it.forEach { index -> gameField[index].enableCluster() }
+        }
+        gameField.forEachIndexed { clusterIndex, cluster ->
+            cluster.state.observe(this@Game) {
+                tryFinishGame(clusterIndex)
+            }
         }
         //Логика при изменении состояния клетки и кластера
         gameField.forEachIndexed { clusterIndex, cluster ->
@@ -80,7 +91,6 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
                 cell.state.observeForever {
                     if (cluster.tryFinishCluster(cellIndex)) {
                         finishedClusters.add(clusterIndex)
-                        tryFinishGame(clusterIndex)
                     }
                     allowedClusters.postValue(
                         if (cellIndex in finishedClusters) ((0..8).toSet() subtract finishedClusters)

@@ -74,6 +74,7 @@ class OnlineClientGame : ViewBindingFragment<FragmentOnlineClientGameBinding>() 
                     binding.textViewTurn.setText(R.string.winner)
                     binding.turnImage.setImageResource(R.drawable.cross)
                 }
+
                 State.O -> {
                     binding.textViewTurn.setText(R.string.winner)
                     binding.turnImage.setImageResource(R.drawable.circle)
@@ -88,6 +89,11 @@ class OnlineClientGame : ViewBindingFragment<FragmentOnlineClientGameBinding>() 
             gameField.forEach { cluster -> cluster.disableCluster() }
             it.forEach { index -> gameField[index].enableCluster() }
         }
+        gameField.forEachIndexed { clusterIndex, cluster ->
+            cluster.state.observe(this@OnlineClientGame) {
+                tryFinishGame(clusterIndex)
+            }
+        }
         //Логика при изменении состояния клетки и кластера
         gameField.forEachIndexed { clusterIndex, cluster ->
             //При изменении состояния при необходимости добавить кластер в финишные
@@ -97,13 +103,12 @@ class OnlineClientGame : ViewBindingFragment<FragmentOnlineClientGameBinding>() 
                 cell.state.observeForever {
                     if (cluster.tryFinishCluster(cellIndex)) {
                         finishedClusters.add(clusterIndex)
-                        tryFinishGame(clusterIndex)
                     }
                     allowedClusters.postValue(
-                        if (currentTurn.value!! != PLAYER)
+                        if (currentTurn.value!! != PLAYER) {
                             if (cellIndex in finishedClusters) ((0..8).toSet() subtract finishedClusters)
                             else setOf(cellIndex)
-                        else setOf()
+                        } else setOf()
                     )
                 }
             }

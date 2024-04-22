@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.hpceen.tictactoe.Connection
 import com.hpceen.tictactoe.OnlineGameViewModel
-import java.net.ConnectException
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -25,14 +24,15 @@ class Client(
         override fun run() {
             if (!currentThread().isInterrupted) {
                 socket = Socket()
-                var flag = true
-                while (flag) {
-                    try {
-                        socket.connect(InetSocketAddress(address, Connection.PORT))
-                        flag = false
-                    } catch (e: ConnectException) {
-                        Log.w("ClientThread", "Try to reconnect")
-                    }
+                try {
+                    socket.connect(InetSocketAddress(address, Connection.PORT), 0)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.w("ClientThread", "Try to reconnect")
+                }
+                Log.i("ClientThread", "Connection established")
+                while (!socket.isConnected) {
+                    sleep(1000)
                 }
                 communicationThread = CommunicationThread(socket, viewModel)
                 communicationThread?.start()
