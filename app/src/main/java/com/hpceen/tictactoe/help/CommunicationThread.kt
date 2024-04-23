@@ -10,11 +10,17 @@ import java.io.OutputStream
 import java.net.Socket
 
 class CommunicationThread(
-    private val socket: Socket,
-    private val viewModel: OnlineGameViewModel
-) :
-    Thread() {
-    private lateinit var handler: Handler
+    private val socket: Socket, private val viewModel: OnlineGameViewModel
+) : Thread() {
+    private var handler: Handler = Handler(Looper.getMainLooper()) { message ->
+        when (message.what) {
+            Connection.MESSAGE_READ -> {
+                val strings = String(message.obj as ByteArray, 0, message.arg1).split(" ")
+                viewModel.turn.postValue(Pair(strings[0].toInt(), strings[1].toInt()))
+            }
+        }
+        true
+    }
     private lateinit var outputStream: OutputStream
     private lateinit var inputStream: InputStream
     private val buffer = ByteArray(1024)
@@ -22,15 +28,6 @@ class CommunicationThread(
     override fun run() {
         outputStream = socket.getOutputStream()
         inputStream = socket.getInputStream()
-        handler = Handler(Looper.getMainLooper()) { message ->
-            when (message.what) {
-                Connection.MESSAGE_READ -> {
-                    val strings = String(message.obj as ByteArray, 0, message.arg1).split(" ")
-                    viewModel.turn.postValue(Pair(strings[0].toInt(), strings[1].toInt()))
-                }
-            }
-            true
-        }
         while (!socket.isClosed) {
             try {
                 val bytes = inputStream.read(buffer)
@@ -38,11 +35,11 @@ class CommunicationThread(
                     handler.obtainMessage(Connection.MESSAGE_READ, bytes, -1, buffer).sendToTarget()
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 Log.e(
                     "com.hpceen.tictactoe.help.CommunicationThread",
-                    "Something doesn't work correctly"
+                    "Something doesn't work correctly: ${e.message}"
                 )
-                e.printStackTrace()
             }
         }
     }

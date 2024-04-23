@@ -1,6 +1,7 @@
 package com.hpceen.tictactoe
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
@@ -8,17 +9,20 @@ import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pManager
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
+import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.hpceen.tictactoe.databinding.FragmentConnectionBinding
+import com.hpceen.tictactoe.databinding.PopupClientAttentionBinding
 import com.hpceen.tictactoe.help.ViewBindingFragment
 import com.hpceen.tictactoe.help.WiFiDirectBroadcastReceiver
 
 
 class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
-    private lateinit var context: Context
     override fun provideBinding(inflater: LayoutInflater) =
         FragmentConnectionBinding.inflate(inflater)
 
@@ -34,30 +38,19 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
     var peers = mutableListOf<WifiP2pDevice>()
     var deviceNameList = mutableListOf<String>()
 
-    val intentFilter = IntentFilter().apply {
+    private val intentFilter = IntentFilter().apply {
         addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
         addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
         addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
         addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        this.context = context
-    }
-
-    override fun onResume() {
-        super.onResume()
-        context.registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("ConnectionFragment", "Fragment destroyed")
-        context.unregisterReceiver(receiver)
+        requireContext().unregisterReceiver(receiver)
         wifiP2pManager?.removeGroup(channel, object : WifiP2pManager.ActionListener {
             override fun onFailure(reason: Int) {
-                Log.d("Disconnect", "Disconnect failed. Reason :$reason")
+                Log.d("Disconnect", "Disconnection failed. Reason :$reason")
             }
 
             override fun onSuccess() {
@@ -66,29 +59,13 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        requireContext().registerReceiver(receiver, intentFilter)
+    }
+
     @SuppressLint("MissingPermission")
     override fun setupView() {
-        channel = wifiP2pManager?.initialize(requireActivity(), requireActivity().mainLooper, null)
-        channel?.also { channel ->
-            receiver = WiFiDirectBroadcastReceiver(wifiP2pManager!!, channel, this)
-        }
-        binding.discover.setOnClickListener {
-            wifiP2pManager?.discoverPeers(channel, object : WifiP2pManager.ActionListener {
-                override fun onSuccess() {
-                    Toast.makeText(
-                        requireContext(), "Discovery Started", Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                override fun onFailure(reason: Int) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Discovery starting failure due reason $reason",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-        }
         peerListListener = WifiP2pManager.PeerListListener { peerList ->
             if (peerList!!.deviceList != peers) {
                 deviceNameList.clear()
@@ -99,7 +76,7 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                     deviceNameList.add(it.deviceName)
                 }
                 if (activity != null) {
-                    binding.listView.adapter = ArrayAdapter(
+                    binding.listViewDeviceNames.adapter = ArrayAdapter(
                         requireActivity().applicationContext,
                         android.R.layout.simple_list_item_1,
                         deviceNameList
@@ -107,26 +84,25 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                 }
             }
             if (peers.size == 0) {
-                Toast.makeText(requireContext(), "No devices found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Устройств не найдено", Toast.LENGTH_SHORT).show()
             }
         }
         connectionInfoListener = ConnectionInfoListener { info ->
             if (info.groupFormed) {
                 Toast.makeText(
-                    requireContext(), "Connected", Toast.LENGTH_LONG
+                    requireContext(), "Подключено", Toast.LENGTH_LONG
                 ).show()
                 if (info.isGroupOwner) {
-                    Toast.makeText(
-                        requireContext(), "Group Formed. Group Owner.", Toast.LENGTH_LONG
-                    ).show()
-                    binding.start.setOnClickListener {
+                    binding.buttonStartGame.visibility = View.VISIBLE
+                    binding.buttonStartGame.setOnClickListener {
                         navController.navigate(
                             ConnectionDirections.actionConnectionToOnlineServerGame()
                         )
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Group Formed.", Toast.LENGTH_SHORT).show()
-                    binding.start.setOnClickListener {
+                    showClientAttentionPopup()
+                    binding.buttonStartGame.visibility = View.VISIBLE
+                    binding.buttonStartGame.setOnClickListener {
                         navController.navigate(
                             ConnectionDirections.actionConnectionToOnlineClientGame(info.groupOwnerAddress)
                         )
@@ -134,28 +110,79 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                 }
             }
         }
-        binding.listView.setOnItemClickListener { _, _, position, _ ->
+        channel = wifiP2pManager?.initialize(requireContext(), requireContext().mainLooper, null)
+        channel?.also { channel ->
+            receiver = WiFiDirectBroadcastReceiver(
+                wifiP2pManager!!,
+                channel,
+                peerListListener,
+                connectionInfoListener
+            )
+        }
+        binding.buttonDiscoverPeers.setOnClickListener {
+            wifiP2pManager?.discoverPeers(channel, object : WifiP2pManager.ActionListener {
+                override fun onSuccess() {
+                    Toast.makeText(
+                        requireContext(), "Поиск", Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                @Suppress("IMPLICIT_CAST_TO_ANY")
+                override fun onFailure(reason: Int) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Не удалось начать поиск, причина:${
+                            when (reason) {
+                                0 -> "ERROR (ошибка)"
+                                1 -> "P2P_UNSUPPORTED (WiFi - Direct не поддерживается)"
+                                2 -> "BUSY (WiFiManager занят)"
+                                else -> {}
+                            }
+                        }",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+        }
+        binding.listViewDeviceNames.setOnItemClickListener { _, _, position, _ ->
             val device = peers[position]
             val config = WifiP2pConfig().apply {
                 deviceAddress = device.deviceAddress
             }
             wifiP2pManager?.connect(channel, config, object : WifiP2pManager.ActionListener {
                 override fun onSuccess() {
-                    binding.listView.isClickable = false
+                    binding.listViewDeviceNames.isClickable = false
                     Toast.makeText(
-                        requireContext(), "Connecting to ${device.deviceName}", Toast.LENGTH_SHORT
+                        requireContext(), "Подключаюсь к ${device.deviceName}", Toast.LENGTH_SHORT
                     ).show()
                 }
-
+                @Suppress("IMPLICIT_CAST_TO_ANY")
                 override fun onFailure(reason: Int) {
                     Toast.makeText(
                         requireContext(),
-                        "Can't connect to ${device.deviceName}, Reason ${reason}",
-                        Toast.LENGTH_SHORT
+                        "Не удалось подключиться к ${device.deviceName}, причина:${
+                            when (reason) {
+                                0 -> "ERROR (ошибка)"
+                                1 -> "P2P_UNSUPPORTED (WiFi - Direct не поддерживается)"
+                                2 -> "BUSY (WiFiManager занят)"
+                                else -> {}
+                            }
+                        }",
+                        Toast.LENGTH_LONG
                     ).show()
                 }
             })
         }
+    }
+
+    private fun showClientAttentionPopup() {
+        val dialog = Dialog(requireContext())
+        val dialogBinding: PopupClientAttentionBinding =
+            PopupClientAttentionBinding.inflate(dialog.layoutInflater)
+        dialogBinding.rules.movementMethod = ScrollingMovementMethod()
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
     }
 
     override fun observe() {}

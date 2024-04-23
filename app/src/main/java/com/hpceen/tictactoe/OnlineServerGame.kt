@@ -38,8 +38,9 @@ class OnlineServerGame : ViewBindingFragment<FragmentOnlineServerGameBinding>() 
     //Создание наблюдателей для всех LiveData перменных
     override fun observe() = with(viewModel) {
         server.isInitialised.observe(this@OnlineServerGame) {
-            Toast.makeText(requireContext(), "CommunicationThread initialised", Toast.LENGTH_SHORT)
-                .show()
+            if (it) Toast.makeText(
+                requireContext(), "Теперь другой игрок может подключиться", Toast.LENGTH_LONG
+            ).show()
             gameField.forEachIndexed { clusterIndex, cluster ->
                 cluster.forEachIndexed { cellIndex, cell ->
                     cell.button.setOnClickListener {
@@ -52,7 +53,7 @@ class OnlineServerGame : ViewBindingFragment<FragmentOnlineServerGameBinding>() 
         }
         //Изменение надписи хода, при изменение хода
         currentTurn.observe(this@OnlineServerGame) {
-            binding.turnImage.setImageResource(
+            binding.imageViewTurn.setImageResource(
                 when (it) {
                     State.X -> R.drawable.cross
                     State.O -> R.drawable.circle
@@ -65,18 +66,18 @@ class OnlineServerGame : ViewBindingFragment<FragmentOnlineServerGameBinding>() 
         gameState.observe(this@OnlineServerGame) {
             when (it) {
                 null -> {
-                    binding.turnImage.isVisible = false
+                    binding.imageViewTurn.isVisible = false
                     R.string.draw
                 }
 
                 State.X -> {
                     binding.textViewTurn.setText(R.string.winner)
-                    binding.turnImage.setImageResource(R.drawable.cross)
+                    binding.imageViewTurn.setImageResource(R.drawable.cross)
                 }
 
                 State.O -> {
                     binding.textViewTurn.setText(R.string.winner)
-                    binding.turnImage.setImageResource(R.drawable.circle)
+                    binding.imageViewTurn.setImageResource(R.drawable.circle)
                 }
             }
             binding.buttonBack.isEnabled = true
@@ -113,9 +114,6 @@ class OnlineServerGame : ViewBindingFragment<FragmentOnlineServerGameBinding>() 
             }
         }
         turn.observe(this@OnlineServerGame) {
-            Toast.makeText(
-                requireContext(), "X сходили ${it.first} ${it.second}", Toast.LENGTH_SHORT
-            ).show()
             makeMove(it.first, it.second)
         }
         //Чтобы начать игру изменяем значение переменной текущего хода

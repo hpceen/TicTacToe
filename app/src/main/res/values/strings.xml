@@ -14,12 +14,9 @@
         Если ход сделан так, что он должен выиграть малую доску по правилам обычных крестиков-ноликов, она отмечается соответствующим знаком (X или O) как победа игрока. Как только малое поле выиграно игроком или полностью заполнено, на нем больше не может быть сделано ни одного хода. Если игрок отправлен на такую доску, то он может играть на любой другой доске.\n
         Игра заканчивается, когда либо игрок выигрывает глобальную доску, либо не остается ни одного законного хода; в этом случае побеждает тот игрок, который победил на большем количестве малых досок (при одинаковом количестве объявляется ничья).
     </string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
+    <string name="client_attention">Убедитесь что другой игрок запустил игру!</string>
+    <string name="discover_peers">Поиск устройств</string>
+    <string name="start_game">Начать игру</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

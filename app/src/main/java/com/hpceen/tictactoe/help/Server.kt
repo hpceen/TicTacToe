@@ -19,13 +19,13 @@ class Server(private val viewModel: OnlineGameViewModel) {
 
     inner class ServerThread : Thread() {
         override fun run() {
-            val serverSocket = ServerSocket(Connection.PORT)
+            serverSocket = ServerSocket(Connection.PORT)
             if (!currentThread().isInterrupted) {
                 try {
                     socket = serverSocket.accept()
                     communicationThread = CommunicationThread(socket, viewModel)
                     communicationThread?.start()
-                    isInitialised.setValue(true)
+                    isInitialised.postValue(true)
                 } catch (e: Exception) {
                     Log.e("ServerThread", "Something doesn't work correctly")
                     e.printStackTrace()

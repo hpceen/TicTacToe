@@ -41,7 +41,7 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
     override fun observe() = with(viewModel) {
         //Изменение надписи хода, при изменение хода
         currentTurn.observe(this@Game) {
-            binding.turnImage.setImageResource(
+            binding.imageViewTurn.setImageResource(
                 when (it) {
                     State.X -> R.drawable.cross
                     State.O -> R.drawable.circle
@@ -52,22 +52,22 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
         }
         //Изменение надписи, при изменении состояния игры
         gameState.observe(this@Game) {
-                when (it) {
-                    null -> {
-                        binding.turnImage.isVisible = false
-                        R.string.draw
-                    }
-
-                    State.X -> {
-                        binding.textViewTurn.setText(R.string.winner)
-                        binding.turnImage.setImageResource(R.drawable.cross)
-                    }
-
-                    State.O -> {
-                        binding.textViewTurn.setText(R.string.winner)
-                        binding.turnImage.setImageResource(R.drawable.circle)
-                    }
+            when (it) {
+                null -> {
+                    binding.imageViewTurn.isVisible = false
+                    R.string.draw
                 }
+
+                State.X -> {
+                    binding.textViewTurn.setText(R.string.winner)
+                    binding.imageViewTurn.setImageResource(R.drawable.cross)
+                }
+
+                State.O -> {
+                    binding.textViewTurn.setText(R.string.winner)
+                    binding.imageViewTurn.setImageResource(R.drawable.circle)
+                }
+            }
             binding.buttonBack.isEnabled = true
             binding.buttonBack.isVisible = true
             gameField.forEach { cluster -> cluster.disableCluster() }

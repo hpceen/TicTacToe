@@ -9,8 +9,7 @@ import java.net.InetSocketAddress
 import java.net.Socket
 
 class Client(
-    private val address: InetAddress,
-    private val viewModel: OnlineGameViewModel
+    private val address: InetAddress, private val viewModel: OnlineGameViewModel
 ) {
     private lateinit var socket: Socket
     private var communicationThread: CommunicationThread? = null
@@ -22,22 +21,16 @@ class Client(
 
     inner class ClientThread : Thread() {
         override fun run() {
-            if (!currentThread().isInterrupted) {
-                socket = Socket()
-                try {
-                    socket.connect(InetSocketAddress(address, Connection.PORT), 0)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Log.w("ClientThread", "Try to reconnect")
-                }
-                Log.i("ClientThread", "Connection established")
-                while (!socket.isConnected) {
-                    sleep(1000)
-                }
-                communicationThread = CommunicationThread(socket, viewModel)
-                communicationThread?.start()
-                isInitialised.postValue(true)
+            socket = Socket()
+            try {
+                socket.connect(InetSocketAddress(address, Connection.PORT), 0)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+            Log.i("ClientThread", "Connection established")
+            communicationThread = CommunicationThread(socket, viewModel)
+            communicationThread?.start()
+            isInitialised.postValue(true)
         }
     }
 
