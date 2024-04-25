@@ -91,7 +91,6 @@ class Game : ViewBindingFragment<FragmentGameBinding>() {
                 cell.state.observeForever {
                     if (cluster.tryFinishCluster(cellIndex)) {
                         finishedClusters.add(clusterIndex)
-
                     }
                     allowedClusters.postValue(
                         if (cellIndex in finishedClusters) ((0..8).toSet() subtract finishedClusters)

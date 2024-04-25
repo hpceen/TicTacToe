@@ -30,13 +30,13 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
         activity?.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
     }
 
-    lateinit var peerListListener: WifiP2pManager.PeerListListener
-    lateinit var connectionInfoListener: ConnectionInfoListener
+    private lateinit var peerListListener: WifiP2pManager.PeerListListener
+    private lateinit var connectionInfoListener: ConnectionInfoListener
 
-    var channel: WifiP2pManager.Channel? = null
-    var receiver: BroadcastReceiver? = null
-    var peers = mutableListOf<WifiP2pDevice>()
-    var deviceNameList = mutableListOf<String>()
+    private var channel: WifiP2pManager.Channel? = null
+    private var receiver: BroadcastReceiver? = null
+    private var peers = mutableListOf<WifiP2pDevice>()
+    private var deviceNameList = mutableListOf<String>()
 
     private val intentFilter = IntentFilter().apply {
         addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
@@ -113,10 +113,7 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
         channel = wifiP2pManager?.initialize(requireContext(), requireContext().mainLooper, null)
         channel?.also { channel ->
             receiver = WiFiDirectBroadcastReceiver(
-                wifiP2pManager!!,
-                channel,
-                peerListListener,
-                connectionInfoListener
+                wifiP2pManager!!, channel, peerListListener, connectionInfoListener
             )
         }
         binding.buttonDiscoverPeers.setOnClickListener {
@@ -130,16 +127,14 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                 @Suppress("IMPLICIT_CAST_TO_ANY")
                 override fun onFailure(reason: Int) {
                     Toast.makeText(
-                        requireContext(),
-                        "Не удалось начать поиск, причина:${
+                        requireContext(), "Не удалось начать поиск, причина:${
                             when (reason) {
                                 0 -> "ERROR (ошибка)"
                                 1 -> "P2P_UNSUPPORTED (WiFi - Direct не поддерживается)"
                                 2 -> "BUSY (WiFiManager занят)"
                                 else -> {}
                             }
-                        }",
-                        Toast.LENGTH_LONG
+                        }", Toast.LENGTH_LONG
                     ).show()
                 }
             })
@@ -156,6 +151,7 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                         requireContext(), "Подключаюсь к ${device.deviceName}", Toast.LENGTH_SHORT
                     ).show()
                 }
+
                 @Suppress("IMPLICIT_CAST_TO_ANY")
                 override fun onFailure(reason: Int) {
                     Toast.makeText(
