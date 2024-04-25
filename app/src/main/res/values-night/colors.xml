@@ -15,8 +15,8 @@
     <color name="DarkGreen">#FF081C15</color>
 
     <!--Specified Colors-->
-    <color name="ShapeColor">@color/black</color>
-    <color name="ClusterDivider">@color/DarkGreen</color>
-    <color name="CellDivider">@color/Mint</color>
-    <color name="CellBackgroundDisabled">@color/Celadon</color>
+    <color name="ShapeColor">@color/white</color>
+    <color name="ClusterDivider">@color/Celadon</color>
+    <color name="CellDivider">@color/BrunswickGreen</color>
+    <color name="CellBackgroundDisabled">@color/SeaGreen</color>
 </resources>
