@@ -78,7 +78,7 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                 if (activity != null) {
                     binding.listViewDeviceNames.adapter = ArrayAdapter(
                         requireActivity().applicationContext,
-                        android.R.layout.simple_list_item_1,
+                        R.layout.item_layout,
                         deviceNameList
                     )
                 }
