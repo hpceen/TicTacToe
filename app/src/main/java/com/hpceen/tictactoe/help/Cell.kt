@@ -7,7 +7,7 @@ import com.hpceen.tictactoe.states.State
 
 //Клетка малого поля (ячейка)
 //Конструктор принимает ImageButton
-class Cell(val button: ImageButton) {
+class Cell(var button: ImageButton) {
     //Состояние ячейки (по умолчанию "Ничего")
     var state: MutableLiveData<State> = MutableLiveData()
 
@@ -15,6 +15,14 @@ class Cell(val button: ImageButton) {
         state.observeForever {
             changeImage(it)
             button.isClickable = false
+        }
+    }
+
+    fun changeButton(newButton: ImageButton) {
+        this.button = newButton
+        if (state.isInitialized) {
+            button.isClickable = false
+            changeImage(state.value!!)
         }
     }
 
