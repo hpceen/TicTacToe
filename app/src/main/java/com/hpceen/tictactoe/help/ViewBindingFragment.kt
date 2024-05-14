@@ -41,8 +41,4 @@ abstract class ViewBindingFragment<VB : ViewBinding> : Fragment() {
 
     abstract fun setupView()
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
 }
