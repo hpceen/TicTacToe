@@ -1,6 +1,5 @@
 package com.hpceen.tictactoe
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.TableLayout
