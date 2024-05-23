@@ -1,6 +1,6 @@
 **Крестики-Нолики++ (Супер Крестики-Нолики)**
 
-https://github.com/hpceen/TicTacToe/assets/70882457/9fa8333a-1fc9-4b2f-8050-ac99b8b97216
+<video src="https://github.com/hpceen/TicTacToe/assets/70882457/9fa8333a-1fc9-4b2f-8050-ac99b8b97216"></video>
 
 На данный момент есть два режима игры:
 •Оффлайн Игра
