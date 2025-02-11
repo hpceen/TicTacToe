@@ -124,7 +124,6 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                     ).show()
                 }
 
-                @Suppress("IMPLICIT_CAST_TO_ANY")
                 override fun onFailure(reason: Int) {
                     Toast.makeText(
                         requireContext(), "Не удалось начать поиск, причина:${
@@ -132,7 +131,7 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                                 0 -> "ERROR (ошибка)"
                                 1 -> "P2P_UNSUPPORTED (WiFi - Direct не поддерживается)"
                                 2 -> "BUSY (WiFiManager занят)"
-                                else -> {}
+                                else -> "UNKNOWN"
                             }
                         }", Toast.LENGTH_LONG
                     ).show()
@@ -152,7 +151,6 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                     ).show()
                 }
 
-                @Suppress("IMPLICIT_CAST_TO_ANY")
                 override fun onFailure(reason: Int) {
                     Toast.makeText(
                         requireContext(),
@@ -161,7 +159,7 @@ class Connection : ViewBindingFragment<FragmentConnectionBinding>() {
                                 0 -> "ERROR (ошибка)"
                                 1 -> "P2P_UNSUPPORTED (WiFi - Direct не поддерживается)"
                                 2 -> "BUSY (WiFiManager занят)"
-                                else -> {}
+                                else -> "UNKNOWN"
                             }
                         }",
                         Toast.LENGTH_LONG
